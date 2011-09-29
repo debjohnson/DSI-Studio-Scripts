@@ -3,7 +3,8 @@
 prompt = {'Seed Count:', 'FA Threshold:', 'Step Size:', 'Turning Angle:', 'Smoothing:', 'Minimum Length:','Maximum Length:', 'Thread Count:'};
 dlg_title = 'Specify Parameters for Batch Tracking';
 def_ans = {'113,586,000','0.0241','0.5','80','0.85','20','140','1'};
-params_answers = inputdlg(prompt,dlg_title,num_lines,def_ans,)
+num_lines = 1
+params_answers = inputdlg(prompt,dlg_title,num_lines,def_ans);
 
 seed_count = str2num(char(strrep((params_answers(1)), ',', '')));
 fa_threshold = str2num(char(params_answers(2)));
