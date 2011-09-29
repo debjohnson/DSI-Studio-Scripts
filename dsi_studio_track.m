@@ -56,7 +56,7 @@ output = sprintf('%s/track%s',output_dir,extension);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Loop for Executing DSI Studio Command   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 for i = 1:size(roi_pairs, 1)
-	strn = sprintf('! %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, output)
+	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, output)
 end
 
 eval(strn);
