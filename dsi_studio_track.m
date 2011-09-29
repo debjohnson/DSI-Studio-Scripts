@@ -3,7 +3,7 @@
 prompt = {'Seed Count:', 'FA Threshold:', 'Step Size:', 'Turning Angle:', 'Smoothing:', 'Minimum Length:','Maximum Length:', 'Thread Count:'};
 dlg_title = 'Specify Parameters for Batch Tracking';
 def_ans = {'113,586,000','0.0241','0.5','80','0.85','20','140','1'};
-num_lines = 1
+num_lines = 1;
 params_answers = inputdlg(prompt,dlg_title,num_lines,def_ans);
 
 seed_count = str2num(char(strrep((params_answers(1)), ',', '')));
@@ -13,18 +13,18 @@ turning_angle = str2num(char(params_answers(4)));
 smoothing = str2num(char(params_answers(5)));
 min_length = str2num(char(params_answers(6)));
 max_length = str2num(char(params_answers(7)));
-thread_count = str2num(char(params_answers(8));
+thread_count = str2num(char(params_answers(8)));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Set Paths for Files   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 [dsi_studio, dsi_studio_path] = uigetfile('C:\Users\*.exe','Select DSI Studio'); % Path for DSI Studio
-dsi_studio_pointer = sprintf('%s%s',dsi_stuio,dsi_stuido_path);
+dsi_studio_pointer = sprintf('%s%s',dsi_studio_path,dsi_studio);
 
 [fib, fibpath] = uigetfile('C:\Users\*.fib.gz','Select the .fib file'); % Path for .fib file
-fibfile = sprintf('%s%s',fib,fibpath);
+fibfile = sprintf('%s%s',fibpath,fib);
 
 [seed, seedpath] = uigetfile('C:\Users\*.nii','Select the seed file'); % Path for the seed file
-seedfile = sprintf('%s%s',fib,fibpath);
+seedfile = sprintf('%s%s',seedpath,seed);
 
 %%======================================================     Paths for ROI Files
 
