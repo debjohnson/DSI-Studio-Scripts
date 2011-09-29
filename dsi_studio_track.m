@@ -1,4 +1,18 @@
-% function dsi_studio_track(fibfile,seedfile,roi,roi2,output); 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Specify Tracking Parameters   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+prompt = {'Seed Count:', 'FA Threshold:', 'Step Size:', 'Turning Angle:', 'Smoothing:', 'Minimum Length:','Maximum Length:', 'Thread Count:'};
+dlg_title = 'Specify Parameters for Batch Tracking';
+def_ans = {'113,586,000','0.0241','0.5','80','0.85','20','140','1'};
+params_answers = inputdlg(prompt,dlg_title,num_lines,def_ans,)
+
+seed_count = str2num(char(strrep((params_answers(1)), ',', '')));
+fa_threshold = str2num(char(params_answers(2)));
+step_size = str2num(char(params_answers(3)));
+turning_angle = str2num(char(params_answers(4)));
+smoothing = str2num(char(params_answers(5)));
+min_length = str2num(char(params_answers(6)));
+max_length = str2num(char(params_answers(7)));
+thread_count = str2num(char(params_answers(8));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Set Paths for Files   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -34,20 +48,12 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Output File   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Specifies location for output file
-output_dir = uigetdir('C:\Users\*.*','Select location for output file');
-extension = questdlg('Select a format for output file','Output File Format','.trk','.txt')
-output = sprintf('%soutput%s',output_dir,extension)
+output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
+extension = questdlg('Select a format for output file','Output File Format','.trk','.txt','.trk'); % Specify output file format
+output = sprintf('%s/track%s',output_dir,extension);
 
-if isequal(format_quest, '.trk')
-	
-else
-	
-end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Loop for Executing DSI Studio Command   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-% Loop for executing DSI Studio command in command prompt
 for i = 1:size(roi_pairs, 1)
 	strn = sprintf('! %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, output)
 end
