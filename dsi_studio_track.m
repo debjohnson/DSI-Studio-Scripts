@@ -1,3 +1,8 @@
+%%=================================================================================
+%% Version 2: Select first ROI file, track from it to all other ROI files selected.
+%%=================================================================================
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Specify Tracking Parameters   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 prompt = {'Seed Count:', 'FA Threshold:', 'Step Size:', 'Turning Angle:', 'Smoothing:', 'Minimum Length:','Maximum Length:', 'Thread Count:'};
@@ -28,20 +33,20 @@ seedfile = sprintf('%s%s',seedpath,seed);
 
 %%======================================================     Paths for ROI Files
 
-% Set paths for first and second ROI files
-[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file'); 
+% Set path for primary ROI file
+
+[roifile, roipath] = uigetfile('C:\Users\*.nii','Select primary ROI file'); 
 roi = sprintf('%s%s',roipath,roifile);
-[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select second ROI file');
+	
+[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select another ROI file for tracking');
 roi2 = sprintf('%s%s',roi2path,roi2file);
 
 roi_pairs = {roi, roi2}; % Create array to store paths for first two ROI files
 
 % Loop for adding more pairs of ROI files
-while isequal(questdlg('Would you like to select more ROI pairs?','Select more?'), 'Yes');
+while isequal(questdlg('Would you like to select another ROI file to use for tracking?','Select Another?'), 'Yes');
 	
-	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file');
-	roi = sprintf('%s%s',roipath,roifile);
-	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select first ROI file');
+	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select another ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 
 	roi_pairs = cat(1, roi_pairs, {roi, roi2}); % Concatenate pairs of ROI pahts into roi_pairs cell array
