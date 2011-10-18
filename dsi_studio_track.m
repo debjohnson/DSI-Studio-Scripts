@@ -1,6 +1,11 @@
-%%=================================================================================
-%% Version 2: Select first ROI file, track from it to all other ROI files selected.
-%%=================================================================================
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is a script that can be used to automate fiber tracking in DSI Studio.
+% In this version of the script, the user selects a "primary" ROI file,
+% and then selects more ROI files. Tracking is performed between the 
+% primary files and all other files selected.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Specify Tracking Parameters   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
