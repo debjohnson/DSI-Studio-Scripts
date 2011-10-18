@@ -9,7 +9,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Specify Tracking Parameters   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 prompt = {'Seed Count:', 'FA Threshold:', 'Step Size:', 'Turning Angle:', 'Smoothing:', 'Minimum Length:','Maximum Length:', 'Thread Count:'};
