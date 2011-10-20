@@ -98,7 +98,7 @@ function pushbutton_dsi_studio_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-[dsi_studio, dsi_studio_path] = uigetfile('C:\Users\','Select DSI Studio'); % Path for DSI Studio
+[dsi_studio, dsi_studio_path] = uigetfile('C:\Users\*.exe','Select DSI Studio'); % Path for DSI Studio
 dsi_studio_pointer = sprintf('%s%s',dsi_studio_path,dsi_studio);
 
 setappdata(hMainGui, 'dsi_studio_pointer', dsi_studio_pointer);
@@ -445,19 +445,20 @@ dsi_studio_pointer = getappdata(hMainGui, 'dsi_studio_pointer');
 seedfile = getappdata(hMainGui, 'seedfile');
 fibfile = getappdata(hMainGui, 'fibfile');
 output_file = getappdata(hMainGui, 'output_file');
-seed_count = getappdata(hMainGui, 'seed_count');
-fa_threshold = getappdata(hMainGui, 'fa_threshold');
-step_size = getappdata(hMainGui, 'step_size');
-turning_angle = getappdata(hMainGui, 'turning_angle');
-min_length = getappdata(hMainGui, 'min_length');
-max_length = getappdata(hMainGui, 'max_length');
-thread_count = getappdata(hMainGui, 'thread_count');
+seed_count = get(handles.seed_count_input, 'string');
+fa_threshold = get(handles.fa_thresh_input, 'string');
+step_size = get(handles.step_size_input, 'string');
+smoothing = get(handles.smoothing_input, 'string');
+turning_angle = get(handles.turning_angle_input, 'string');
+min_length = get(handles.min_input, 'string');
+max_length = get(handles.max_input, 'string');
+thread_count = get(handles.thread_count_input, 'string');
 roi_pairs = getappdata(hMainGui, 'roi_pairs');
 
 for i = 1:size(roi_pairs, 1)
-	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i 			--turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, output_file)
+	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, output_file)
 
-eval(strn)
+eval(strn);
 
 end
 
@@ -477,12 +478,12 @@ function pushbutton_outputfile_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hMainGui = getappdata(0, 'hMianGui');
+hMainGui = getappdata(0, 'hMainGui');
 
 prompt = {'Output File Name:'};
 dlg_title = 'Enter a name for the output file';
 params_answers = inputdlg(prompt,dlg_title);
-output_name = params_answers(1);
+output_name = char(params_answers(1));
 output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
 extension = questdlg('Select a format for output file','Output File Format','.trk','.txt','.trk'); % Specify output file format
 
