@@ -62,7 +62,7 @@ end
 
 output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
 extension = questdlg('Select a format for output file','Output File Format','.trk','.txt','.trk'); % Specify output file format
-output = sprintf('%s/track%s',output_dir,extension);
+output = sprintf('%s/output%s',output_dir,extension);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Loop for Executing DSI Studio Command   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

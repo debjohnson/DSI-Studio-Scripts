@@ -22,7 +22,7 @@ function varargout = Batch_Tracking(varargin)
 
 % Edit the above text to modify the response to help Batch_Tracking
 
-% Last Modified by GUIDE v2.5 20-Oct-2011 13:54:36
+% Last Modified by GUIDE v2.5 18-Oct-2011 16:14:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -61,15 +61,6 @@ guidata(hObject, handles);
 % UIWAIT makes Batch_Tracking wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
-setappdata(0, 'hMainGui', gcf);
-% set(handles.seed_count_input, 'string', 113,586,000);
-% set(handles.fa_thresh_input, 'string', 0.0241);
-% set(handles.step_size_input, 'string', 0.5);
-% set(handles.turning_angle_input, 'string', 80);
-% set(handles.smoothing_input, 'string', .85);
-% set(handles.min_input, 'string', 20);
-% set(handles.max_input, 'string', 140);
-% set(handles.thread_count_input, 'string', 1);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = Batch_Tracking_OutputFcn(hObject, eventdata, handles) 
@@ -78,17 +69,13 @@ function varargout = Batch_Tracking_OutputFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
 
 
 % --------------------------------------------------------------------
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   SPECIFY FILE PATHS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%==========================================================     DSI STUDIO
 
 % --- Executes on button press in pushbutton_dsi_studio.
 function pushbutton_dsi_studio_Callback(hObject, eventdata, handles)
@@ -96,15 +83,10 @@ function pushbutton_dsi_studio_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hMainGui = getappdata(0, 'hMainGui');
-
-[dsi_studio, dsi_studio_path] = uigetfile('C:\Users\','Select DSI Studio'); % Path for DSI Studio
+[dsi_studio, dsi_studio_path] = uigetfile('Users/','Select DSI Studio'); % Path for DSI Studio
 dsi_studio_pointer = sprintf('%s%s',dsi_studio_path,dsi_studio);
 
-setappdata(hMainGui, 'dsi_studio_pointer', dsi_studio_pointer);
 set(handles.display_dsi_studio, 'string', dsi_studio_pointer);
-
-%%===========================================================     SEED FILE
 
 % --- Executes on button press in pushbutton_seed_file.
 function pushbutton_seed_file_Callback(hObject, eventdata, handles)
@@ -112,15 +94,10 @@ function pushbutton_seed_file_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hMainGui = getappdata(0, 'hMainGui');
-
-[seed, seedpath] = uigetfile('C:\Users\*.nii','Select the seed file'); % Path for the seed file
+[seed, seedpath] = uigetfile('Users/*.nii','Select the seed file'); % Path for the seed file
 seedfile = sprintf('%s%s',seedpath,seed);
 
-setappdata(hMainGui, 'seedfile', seedfile);
 set(handles.display_seed_file, 'string', seedfile);
-
-%%============================================================     FIB FILE
 
 % --- Executes on button press in pushbutton_fib_file.
 function pushbutton_fib_file_Callback(hObject, eventdata, handles)
@@ -128,17 +105,12 @@ function pushbutton_fib_file_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hMainGui = getappdata(0, 'hMainGui');
-
-[fib, fibpath] = uigetfile('C:\Users\*.fib.gz','Select the .fib file'); % Path for .fib file
+[fib, fibpath] = uigetfile('Users/*.fib.gz','Select the .fib file'); % Path for .fib file
 fibfile = sprintf('%s%s',fibpath,fib);
 
-setappdata(hMainGui, 'fibfile', fibfile);
 set(handles.display_fib_file, 'string', fibfile);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TRACKING PARAMETERS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%===============================================================     SEED COUNT
 
 function seed_count_input_Callback(hObject, eventdata, handles)
 % hObject    handle to seed_count_input (see GCBO)
@@ -147,9 +119,6 @@ function seed_count_input_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of seed_count_input as text
 %        str2double(get(hObject,'String')) returns contents of seed_count_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'seed_count', get(hObject, 'string'))
 
 % --- Executes during object creation, after setting all properties.
 function seed_count_input_CreateFcn(hObject, eventdata, handles)
@@ -163,8 +132,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-%%=============================================================     FA THRESHOLD
-
 function fa_thresh_input_Callback(hObject, eventdata, handles)
 % hObject    handle to fa_thresh_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -173,8 +140,6 @@ function fa_thresh_input_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of fa_thresh_input as text
 %        str2double(get(hObject,'String')) returns contents of fa_thresh_input as a double
 
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'fa_threshold', get(hObject, 'string'))
 
 % --- Executes during object creation, after setting all properties.
 function fa_thresh_input_CreateFcn(hObject, eventdata, handles)
@@ -188,8 +153,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-%%================================================================     STEP SIZE
-
 function step_size_input_Callback(hObject, eventdata, handles)
 % hObject    handle to step_size_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -197,9 +160,6 @@ function step_size_input_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of step_size_input as text
 %        str2double(get(hObject,'String')) returns contents of step_size_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'step_size', get(hObject, 'string'))
 
 % --- Executes during object creation, after setting all properties.
 function step_size_input_CreateFcn(hObject, eventdata, handles)
@@ -213,8 +173,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-%%============================================================     TURNING ANGLE
-
 function turning_angle_input_Callback(hObject, eventdata, handles)
 % hObject    handle to turning_angle_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -222,9 +180,6 @@ function turning_angle_input_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of turning_angle_input as text
 %        str2double(get(hObject,'String')) returns contents of turning_angle_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'turning_angle', get(hObject, 'string'))
 
 % --- Executes during object creation, after setting all properties.
 function turning_angle_input_CreateFcn(hObject, eventdata, handles)
@@ -238,8 +193,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-%%================================================================     SMOOTHING
-
 function smoothing_input_Callback(hObject, eventdata, handles)
 % hObject    handle to smoothing_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -247,9 +200,6 @@ function smoothing_input_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of smoothing_input as text
 %        str2double(get(hObject,'String')) returns contents of smoothing_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'smoothing', get(hObject, 'string'))
 
 % --- Executes during object creation, after setting all properties.
 function smoothing_input_CreateFcn(hObject, eventdata, handles)
@@ -263,8 +213,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-%%===================================================================     MIN
-
 function min_input_Callback(hObject, eventdata, handles)
 % hObject    handle to min_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -272,9 +220,6 @@ function min_input_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of min_input as text
 %        str2double(get(hObject,'String')) returns contents of min_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'min_length', get(hObject, 'string'))
 
 % --- Executes during object creation, after setting all properties.
 function min_input_CreateFcn(hObject, eventdata, handles)
@@ -288,8 +233,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-%%======================================================================     MAX
-
 function max_input_Callback(hObject, eventdata, handles)
 % hObject    handle to max_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -297,9 +240,6 @@ function max_input_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of max_input as text
 %        str2double(get(hObject,'String')) returns contents of max_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'max_length', get(hObject, 'string'))
 
 % --- Executes during object creation, after setting all properties.
 function max_input_CreateFcn(hObject, eventdata, handles)
@@ -313,8 +253,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-%%=============================================================     THREAD COUNT
-
 function thread_count_input_Callback(hObject, eventdata, handles)
 % hObject    handle to thread_count_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -322,9 +260,6 @@ function thread_count_input_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of thread_count_input as text
 %        str2double(get(hObject,'String')) returns contents of thread_count_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'thread_count', get(hObject, 'string'))
 
 % --- Executes during object creation, after setting all properties.
 function thread_count_input_CreateFcn(hObject, eventdata, handles)
@@ -337,8 +272,6 @@ function thread_count_input_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   SPECIFY ROI FILES/PAIRS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function counter_Callback(hObject, eventdata, handles)
 % hObject    handle to counter (see GCBO)
@@ -361,44 +294,76 @@ function pushbutton_add_ROI_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hMainGui = getappdata(0, 'hMainGui');
+% if isequal(get(handles.counter,'string'),'a');
+% 	[roifile, roipath] = uigetfile('Users/*.nii','Select first ROI file'); 
+% 	roi = sprintf('%s%s',roipath,roifile);
+% 	[roi2file, roi2path] = uigetfile('Users/*.nii','Select second ROI file');
+% 	roi2 = sprintf('%s%s',roi2path,roi2file);
+% 	
+% 	roi_pairs = {roi, roi2}; % Create array to store paths for first two ROI files
+% 	set(handles.display_roi_pairs, 'string', roi_pairs);
+% 	set(handles.counter, 'string', 'b');
+% else
+% 	roi_pairs = get(handles.display_roi_pairs, 'string')
+% 	[roifile, roipath] = uigetfile('Users/*.nii','Select first ROI file');
+% 	roi = sprintf('%s%s',roipath,roifile);
+% 	[roi2file, roi2path] = uigetfile('Users/*.nii','Select first ROI file');
+% 	roi2 = sprintf('%s%s',roi2path,roi2file);
+% 
+% 	roi_pairs_new = cat(1, roi_pairs, {roi, roi2}); % Concatenate pairs of ROI pahts into roi_pairs cell array
+%     set(handles.display_roi_pairs, 'string', roi_pairs_new);
+% end
 
-if ~iscell(get(handles.temp_roi_pairs, 'string'));
-	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file'); 
+if ~iscell(get(handles.display_roi_pairs, 'string'));
+	[roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file'); 
 	roi = sprintf('%s%s',roipath,roifile);
-	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select second ROI file');
+	[roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 	
 	roi_pairs = {roi, roi2}; % Create array to store paths for first two ROI files
-	roi_pairs_names = {roifile, roi2file};
-
-	setappdata(hMainGui, 'roi_pairs', roi_pairs);
-	setappdata(hMainGui, 'roi_pairs_names', roi_pairs_names);
+	roi_pairs_files = {roifile, roi2file};
     
-    set(handles.temp_roi_pairs, 'string', roi_pairs);
+    set(handles.display_roi_pairs, 'string', roi_pairs);
+    set(handles.roi_filenames, 'string', roi_pairs_files);
     set(handles.listbox, 'string', sprintf('%s ; %s',roifile,roi2file));
 else
-	hMainGui = getappdata(0, 'hMainGui');
-	roi_pairs = getappdata(hMainGui, 'roi_pairs');
-	roi_pairs_names = getappdata(hMainGui, 'roi_pairs_names');
-	
+	initial_roi_pairs = (get(handles.display_roi_pairs, 'string'))';
+    initial_roi_pairs_files = (get(handles.roi_filenames, 'string'))';
     original_list = get(handles.listbox, 'string');
     
-	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file');
+	[roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file');
 	roi = sprintf('%s%s',roipath,roifile);
-	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select first ROI file');
+	[roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 
-	current_roi_pairs = cat(1, roi_pairs, {roi, roi2});
-    current_roi_pairs_names = cat(1, roi_pairs_names, {roifile, roi2file});
+	current_roi_pairs = cat(1, initial_roi_pairs, {roi, roi2}); % Concatenate pairs of ROI pahts into roi_pairs cell array
+    current_roi_pairs_files = cat(1, initial_roi_pairs_files, {roifile, roi2file});
     
-	setappdata(hMainGui, 'roi_pairs', current_roi_pairs);
-	setappdata(hMainGui, 'roi_pairs_names', current_roi_pairs_names);
+    set(handles.display_roi_pairs, 'string', current_roi_pairs);
  
     newlist_items = sprintf('%s ; %s',roifile,roi2file);
     t=[original_list; {newlist_items}]
     set(handles.listbox, 'string', t);
+    
+    set(handles.roi_filenames, 'string', current_roi_pairs_files);
 end
+
+
+% --- Executes on button press in pushbutton_clear.
+function pushbutton_clear_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_clear (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set(handles.display_roi_pairs, 'string', '')
+
+
+% --- Executes on button press in pushbutton_start_tracking.
+function pushbutton_start_tracking_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_start_tracking (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
 
 % --- Executes on selection change in listbox.
 function listbox_Callback(hObject, eventdata, handles)
@@ -408,6 +373,7 @@ function listbox_Callback(hObject, eventdata, handles)
 
 % Hints: contents = get(hObject,'String') returns listbox contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listbox
+
 
 % --- Executes during object creation, after setting all properties.
 function listbox_CreateFcn(hObject, eventdata, handles)
@@ -420,76 +386,3 @@ function listbox_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-% ==========================================================     CLEAR ROI FILES
-% 
-% % --- Executes on button press in pushbutton_clear.
-% function pushbutton_clear_Callback(hObject, eventdata, handles)
-% % hObject    handle to pushbutton_clear (see GCBO)
-% % eventdata  reserved - to be defined in a future version of MATLAB
-% % handles    structure with handles and user data (see GUIDATA)
-% 
-% set(handles.temp_roi_pairs, 'string', '');
-
-% --- Executes on button press in pushbutton_start_tracking.
-function pushbutton_start_tracking_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton_start_tracking (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   GET ALL DATA FROM GUI   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-hMainGui = getappdata(0, 'hMainGui');
-
-dsi_studio_pointer = getappdata(hMainGui, 'dsi_studio_pointer');
-seedfile = getappdata(hMainGui, 'seedfile');
-fibfile = getappdata(hMainGui, 'fibfile');
-output_file = getappdata(hMainGui, 'output_file');
-seed_count = getappdata(hMainGui, 'seed_count');
-fa_threshold = getappdata(hMainGui, 'fa_threshold');
-step_size = getappdata(hMainGui, 'step_size');
-turning_angle = getappdata(hMainGui, 'turning_angle');
-min_length = getappdata(hMainGui, 'min_length');
-max_length = getappdata(hMainGui, 'max_length');
-thread_count = getappdata(hMainGui, 'thread_count');
-roi_pairs = getappdata(hMainGui, 'roi_pairs');
-
-for i = 1:size(roi_pairs, 1)
-	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i 			--turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, output_file)
-
-eval(strn)
-
-end
-
-% --- Executes when user attempts to close figure1.
-function figure1_CloseRequestFcn(hObject, eventdata, handles)
-% hObject    handle to figure1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: delete(hObject) closes the figure
-delete(hObject);
-
-
-% --- Executes on button press in pushbutton_outputfile.
-function pushbutton_outputfile_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton_outputfile (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-hMainGui = getappdata(0, 'hMianGui');
-
-prompt = {'Output File Name:'};
-dlg_title = 'Enter a name for the output file';
-params_answers = inputdlg(prompt,dlg_title);
-output_name = params_answers(1);
-output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
-extension = questdlg('Select a format for output file','Output File Format','.trk','.txt','.trk'); % Specify output file format
-
-output_file = sprintf('%s/%s%s',output_dir,output_name,extension);
-
-setappdata(hMainGui, 'output_file', output_file);
-set(handles.display_outputfile, 'string', output_file);
-
-
-
