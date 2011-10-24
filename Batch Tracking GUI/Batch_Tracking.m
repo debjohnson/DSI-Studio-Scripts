@@ -445,21 +445,20 @@ dsi_studio_pointer = getappdata(hMainGui, 'dsi_studio_pointer');
 seedfile = getappdata(hMainGui, 'seedfile');
 fibfile = getappdata(hMainGui, 'fibfile');
 output_file = getappdata(hMainGui, 'output_file');
-seed_count = get(handles.seed_count_input, 'string');
-fa_threshold = get(handles.fa_thresh_input, 'string');
-step_size = get(handles.step_size_input, 'string');
-smoothing = get(handles.smoothing_input, 'string');
-turning_angle = get(handles.turning_angle_input, 'string');
-min_length = get(handles.min_input, 'string');
-max_length = get(handles.max_input, 'string');
-thread_count = get(handles.thread_count_input, 'string');
+seed_count = str2num(get(handles.seed_count_input, 'string'));
+fa_threshold = str2num(get(handles.fa_thresh_input, 'string'));
+step_size = str2num(get(handles.step_size_input, 'string'));
+smoothing = str2num(get(handles.smoothing_input, 'string'));
+turning_angle = str2num(get(handles.turning_angle_input, 'string'));
+min_length = str2num(get(handles.min_input, 'string'));
+max_length = str2num(get(handles.max_input, 'string'));
+thread_count = str2num(get(handles.thread_count_input, 'string'));
 roi_pairs = getappdata(hMainGui, 'roi_pairs');
 
 for i = 1:size(roi_pairs, 1)
 	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, output_file)
 
 eval(strn);
-
 end
 
 % --- Executes when user attempts to close figure1.
@@ -487,7 +486,7 @@ output_name = char(params_answers(1));
 output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
 extension = questdlg('Select a format for output file','Output File Format','.trk','.txt','.trk'); % Specify output file format
 
-output_file = sprintf('%s/%s%s',output_dir,output_name,extension);
+output_file = sprintf('%s\\%s%s',output_dir,output_name,extension);
 
 setappdata(hMainGui, 'output_file', output_file);
 set(handles.display_outputfile, 'string', output_file);
