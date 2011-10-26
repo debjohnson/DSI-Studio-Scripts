@@ -103,7 +103,7 @@ hMainGui = getappdata(0, 'hMainGui');
 dsi_studio_pointer = sprintf('%s%s',dsi_studio_path,dsi_studio);
 
 setappdata(hMainGui, 'dsi_studio_pointer', dsi_studio_pointer);
-set(handles.display_dsi_studio, 'string', dsi_studio_pointer);
+set(handles.display_dsi_studio, 'string', dsi_studio);
 
 %%===========================================================     SEED FILE
 
@@ -119,7 +119,7 @@ hMainGui = getappdata(0, 'hMainGui');
 seedfile = sprintf('%s%s',seedpath,seed);
 
 setappdata(hMainGui, 'seedfile', seedfile);
-set(handles.display_seed_file, 'string', seedfile);
+set(handles.display_seed_file, 'string', seed);
 
 %%============================================================     FIB FILE
 
@@ -135,7 +135,7 @@ hMainGui = getappdata(0, 'hMainGui');
 fibfile = sprintf('%s%s',fibpath,fib);
 
 setappdata(hMainGui, 'fibfile', fibfile);
-set(handles.display_fib_file, 'string', fibfile);
+set(handles.display_fib_file, 'string', fib);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TRACKING PARAMETERS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
