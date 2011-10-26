@@ -22,7 +22,7 @@ function varargout = Batch_Tracking(varargin)
 
 % Edit the above text to modify the response to help Batch_Tracking
 
-% Last Modified by GUIDE v2.5 20-Oct-2011 13:54:36
+% Last Modified by GUIDE v2.5 26-Oct-2011 11:50:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -57,6 +57,7 @@ handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
+
 
 % UIWAIT makes Batch_Tracking wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -365,22 +366,32 @@ hMainGui = getappdata(0, 'hMainGui');
 
 if ~iscell(get(handles.temp_roi_pairs, 'string'));
 	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file'); 
+	% [roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file'); 
 	roi = sprintf('%s%s',roipath,roifile);
 	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select second ROI file');
+	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 	
 	roi_pairs = {roi, roi2}; % Create array to store paths for first two ROI files
 	roi_pairs_names = {roifile, roi2file};
-
+	
+	%%==============================================     File names for output files
+	
+	[pathstr, roi_outputname, ext] = fileparts(roi);
+	[pathstr, roi2_outputname, ext] = fileparts(roi2);
+	roi_outputnames = {roi_outputname, roi2_outputname};
+	
 	setappdata(hMainGui, 'roi_pairs', roi_pairs);
 	setappdata(hMainGui, 'roi_pairs_names', roi_pairs_names);
-    
+    setappdata(hMainGui, 'roi_outputnames', roi_outputnames);
+
     set(handles.temp_roi_pairs, 'string', roi_pairs);
     set(handles.listbox, 'string', sprintf('%s ; %s',roifile,roi2file));
 else
 	hMainGui = getappdata(0, 'hMainGui');
 	roi_pairs = getappdata(hMainGui, 'roi_pairs');
 	roi_pairs_names = getappdata(hMainGui, 'roi_pairs_names');
+	roi_outputnames = getappdata(hMainGui, 'roi_outputnames');
 	
     original_list = get(handles.listbox, 'string');
     
@@ -389,11 +400,16 @@ else
 	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select first ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 
+	[pathstr, roi_outputname, ext] = fileparts(roi);
+	[pathstr, roi2_outputname, ext] = fileparts(roi2);
+
 	current_roi_pairs = cat(1, roi_pairs, {roi, roi2});
     current_roi_pairs_names = cat(1, roi_pairs_names, {roifile, roi2file});
+	current_roi_outputnames = cat(1, roi_outputnames, {roi_outputname, roi2_outputname});
     
 	setappdata(hMainGui, 'roi_pairs', current_roi_pairs);
 	setappdata(hMainGui, 'roi_pairs_names', current_roi_pairs_names);
+	setappdata(hMainGui, 'roi_outputnames', current_roi_outputnames);
  
     newlist_items = sprintf('%s ; %s',roifile,roi2file);
     t=[original_list; {newlist_items}]
@@ -444,7 +460,6 @@ hMainGui = getappdata(0, 'hMainGui');
 dsi_studio_pointer = getappdata(hMainGui, 'dsi_studio_pointer');
 seedfile = getappdata(hMainGui, 'seedfile');
 fibfile = getappdata(hMainGui, 'fibfile');
-output_file = getappdata(hMainGui, 'output_file');
 seed_count = str2num(get(handles.seed_count_input, 'string'));
 fa_threshold = str2num(get(handles.fa_thresh_input, 'string'));
 step_size = str2num(get(handles.step_size_input, 'string'));
@@ -455,7 +470,24 @@ max_length = str2num(get(handles.max_input, 'string'));
 thread_count = str2num(get(handles.thread_count_input, 'string'));
 roi_pairs = getappdata(hMainGui, 'roi_pairs');
 
+%%==============================================================     OUTPUT FILE
+
+output_dir = getappdata(hMainGui, 'output_dir');
+roi_outputnames = getappdata(hMainGui, 'roi_outputnames');
+
+% Output file extension
+if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
+	% Radio button is selected, take appropriate action
+	output_extension = '.trk'
+else
+	% Radio button is not selected, take appropriate action
+	output_extension = '.txt'
+end
+
 for i = 1:size(roi_pairs, 1)
+	output_filename = sprintf('%s TO %s%s', char(roi_outputnames(i)), char(roi_outputnames(i, 2)), output_extension);
+	output = sprintf('%s\\%s', output_dir, output_filename);
+
 	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, output_file)
 
 eval(strn);
@@ -479,17 +511,8 @@ function pushbutton_outputfile_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-prompt = {'Output File Name:'};
-dlg_title = 'Enter a name for the output file';
-params_answers = inputdlg(prompt,dlg_title);
-output_name = char(params_answers(1));
+prompt = {'Output Directory:'};
 output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
-extension = questdlg('Select a format for output file','Output File Format','.trk','.txt','.trk'); % Specify output file format
 
-output_file = sprintf('%s\\%s%s',output_dir,output_name,extension);
-
-setappdata(hMainGui, 'output_file', output_file);
-set(handles.display_outputfile, 'string', output_file);
-
-
-
+setappdata(hMainGui, 'output_dir', output_dir);
+set(handles.display_outputdir, 'string', output_dir);
