@@ -363,10 +363,11 @@ function pushbutton_add_ROI_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 hMainGui = getappdata(0, 'hMainGui');
+output_dir = getappdata(hMainGui, 'output_dir');
 
 if ~iscell(get(handles.temp_roi_pairs, 'string'));
 	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file'); 
-	% [roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file'); 
+	% [roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file');
 	roi = sprintf('%s%s',roipath,roifile);
 	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select second ROI file');
 	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
@@ -381,9 +382,28 @@ if ~iscell(get(handles.temp_roi_pairs, 'string'));
 	[pathstr, roi2_outputname, ext] = fileparts(roi2);
 	roi_outputnames = {roi_outputname, roi2_outputname};
 	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TESTTESTEST   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	% Output file extension
+	if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
+		% Radio button is selected, take appropriate action
+		output_extension = '.trk'
+	else
+		% Radio button is not selected, take appropriate action
+		output_extension = '.txt'
+	end
+
+	output_filename = sprintf('%s TO %s%s',roi_outputname,roi2_outputname,output_extension);
+	output = sprintf('%s\\%s', output_dir, output_filename);
+	
+	output_list = {output};
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TESTESTEST   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	setappdata(hMainGui, 'roi_pairs', roi_pairs);
 	setappdata(hMainGui, 'roi_pairs_names', roi_pairs_names);
     setappdata(hMainGui, 'roi_outputnames', roi_outputnames);
+	setappdata(hMainGui, 'output_list', output_list);
 
     set(handles.temp_roi_pairs, 'string', roi_pairs);
     set(handles.listbox, 'string', sprintf('%s ; %s',roifile,roi2file));
@@ -392,24 +412,45 @@ else
 	roi_pairs = getappdata(hMainGui, 'roi_pairs');
 	roi_pairs_names = getappdata(hMainGui, 'roi_pairs_names');
 	roi_outputnames = getappdata(hMainGui, 'roi_outputnames');
+	output_list = getappdata(hMainGui, 'output_list');
 	
     original_list = get(handles.listbox, 'string');
     
 	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file');
+	% [roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file'); 
 	roi = sprintf('%s%s',roipath,roifile);
 	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select first ROI file');
+	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 
 	[pathstr, roi_outputname, ext] = fileparts(roi);
 	[pathstr, roi2_outputname, ext] = fileparts(roi2);
 
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TESTTESTEST   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	% Output file extension
+	if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
+		% Radio button is selected, take appropriate action
+		output_extension = '.trk'
+	else
+		% Radio button is not selected, take appropriate action
+		output_extension = '.txt'
+	end
+
+	output_filename = sprintf('%s TO %s%s',roi_outputname,roi2_outputname,output_extension);
+	output = sprintf('%s\\%s', output_dir, output_filename);
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TESTESTEST   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 	current_roi_pairs = cat(1, roi_pairs, {roi, roi2});
     current_roi_pairs_names = cat(1, roi_pairs_names, {roifile, roi2file});
 	current_roi_outputnames = cat(1, roi_outputnames, {roi_outputname, roi2_outputname});
+	output_list(end+1) = {output};
     
 	setappdata(hMainGui, 'roi_pairs', current_roi_pairs);
 	setappdata(hMainGui, 'roi_pairs_names', current_roi_pairs_names);
 	setappdata(hMainGui, 'roi_outputnames', current_roi_outputnames);
+	setappdata(hMainGui, 'output_list', output_list);
  
     newlist_items = sprintf('%s ; %s',roifile,roi2file);
     t=[original_list; {newlist_items}]
@@ -469,26 +510,26 @@ min_length = str2num(get(handles.min_input, 'string'));
 max_length = str2num(get(handles.max_input, 'string'));
 thread_count = str2num(get(handles.thread_count_input, 'string'));
 roi_pairs = getappdata(hMainGui, 'roi_pairs');
+output_list = getappdata(hMainGui, 'output_list');
 
-%%==============================================================     OUTPUT FILE
-
-output_dir = getappdata(hMainGui, 'output_dir');
-roi_outputnames = getappdata(hMainGui, 'roi_outputnames');
-
-% Output file extension
-if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
-	% Radio button is selected, take appropriate action
-	output_extension = '.trk'
-else
-	% Radio button is not selected, take appropriate action
-	output_extension = '.txt'
-end
+% 
+% %%==============================================================     OUTPUT FILE
+% 
+% output_dir = getappdata(hMainGui, 'output_dir');
+% roi_outputnames = getappdata(hMainGui, 'roi_outputnames');
+% 
+% % Output file extension
+% if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
+% 	% Radio button is selected, take appropriate action
+% 	output_extension = '.trk'
+% else
+% 	% Radio button is not selected, take appropriate action
+% 	output_extension = '.txt'
+% end
 
 for i = 1:size(roi_pairs, 1)
-	output_filename = sprintf('%s TO %s%s', char(roi_outputnames(i)), char(roi_outputnames(i, 2)), output_extension);
-	output = sprintf('%s\\%s', output_dir, output_filename);
 
-	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, output_file)
+	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, char(output_list(i)))
 
 eval(strn);
 end
