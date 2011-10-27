@@ -1,3 +1,14 @@
+%%==============================================================================
+                         BATCH TRACKING GUI FOR DSI STUDIO
+%%==============================================================================
+
+%  
+% Batch_Tracking.m
+% 
+% This GUI is designed for batch tracking in DSI studio.
+% 
+% 
+
 function varargout = Batch_Tracking(varargin)
 % BATCH_TRACKING M-file for Batch_Tracking.fig
 %      BATCH_TRACKING, by itself, creates a new BATCH_TRACKING or raises the existing
@@ -518,10 +529,14 @@ output_list = getappdata(hMainGui, 'output_list');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   START TRACKING   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 for i = 1:size(roi_pairs, 1)
-
+	
 	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, char(output_list(i)));
 
 	eval(strn)
+	
+%%==============================================================================%%%
+%%                        ADD TEXT FILE OUTOPUT CODE HERE						%%%
+%%==============================================================================%%%
 	
 end
 
