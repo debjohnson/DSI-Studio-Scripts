@@ -512,26 +512,12 @@ thread_count = str2num(get(handles.thread_count_input, 'string'));
 roi_pairs = getappdata(hMainGui, 'roi_pairs');
 output_list = getappdata(hMainGui, 'output_list');
 
-% 
-% %%==============================================================     OUTPUT FILE
-% 
-% output_dir = getappdata(hMainGui, 'output_dir');
-% roi_outputnames = getappdata(hMainGui, 'roi_outputnames');
-% 
-% % Output file extension
-% if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
-% 	% Radio button is selected, take appropriate action
-% 	output_extension = '.trk'
-% else
-% 	% Radio button is not selected, take appropriate action
-% 	output_extension = '.txt'
-% end
 
 for i = 1:size(roi_pairs, 1)
 
-	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, char(output_list(i)))
+	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, char(output_list(i)));
 
-eval(strn);
+eval(strn)
 end
 
 % --- Executes when user attempts to close figure1.
