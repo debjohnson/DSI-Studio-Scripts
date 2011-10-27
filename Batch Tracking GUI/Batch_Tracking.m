@@ -339,6 +339,22 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+%%====================================================     OUTPUT FILE DIRECTORY
+
+% --- Executes on button press in pushbutton_outputfile.
+function pushbutton_outputfile_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_outputfile (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+hMainGui = getappdata(0, 'hMainGui');
+
+prompt = {'Output Directory:'};
+output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
+
+setappdata(hMainGui, 'output_dir', output_dir);
+set(handles.display_outputdir, 'string', output_dir);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   SPECIFY ROI FILES/PAIRS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function counter_Callback(hObject, eventdata, handles)
@@ -367,10 +383,8 @@ output_dir = getappdata(hMainGui, 'output_dir');
 
 if ~iscell(get(handles.temp_roi_pairs, 'string'));
 	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file'); 
-	% [roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file');
 	roi = sprintf('%s%s',roipath,roifile);
 	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select second ROI file');
-	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 	
 	roi_pairs = {roi, roi2}; % Create array to store paths for first two ROI files
@@ -382,8 +396,6 @@ if ~iscell(get(handles.temp_roi_pairs, 'string'));
 	[pathstr, roi2_outputname, ext] = fileparts(roi2);
 	roi_outputnames = {roi_outputname, roi2_outputname};
 	
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TESTTESTEST   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	
 	% Output file extension
 	if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
 		% Radio button is selected, take appropriate action
@@ -393,13 +405,9 @@ if ~iscell(get(handles.temp_roi_pairs, 'string'));
 		output_extension = '.txt'
 	end
 
-	% output_filename = sprintf('%s TO %s%s',roi_outputname,roi2_outputname,output_extension);
-	output_filename = sprintf('%s%s',roi_outputname,output_extension);
+	output_filename = sprintf('%s_TO_%s%s',roi_outputname,roi2_outputname,output_extension);
 	output = sprintf('%s\\%s', output_dir, output_filename);
-	
 	output_list = {output};
-	
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TESTESTEST   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	setappdata(hMainGui, 'roi_pairs', roi_pairs);
 	setappdata(hMainGui, 'roi_pairs_names', roi_pairs_names);
@@ -418,17 +426,13 @@ else
     original_list = get(handles.listbox, 'string');
     
 	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file');
-	% [roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file'); 
 	roi = sprintf('%s%s',roipath,roifile);
 	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select first ROI file');
-	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 
 	[pathstr, roi_outputname, ext] = fileparts(roi);
 	[pathstr, roi2_outputname, ext] = fileparts(roi2);
 
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TESTTESTEST   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	
 	% Output file extension
 	if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
 		% Radio button is selected, take appropriate action
@@ -438,11 +442,8 @@ else
 		output_extension = '.txt'
 	end
 
-	% output_filename = sprintf('%s TO %s%s',roi_outputname,roi2_outputname,output_extension);
-	output_filename = sprintf('%s%s',roi_outputname,output_extension);
+	output_filename = sprintf('%s_TO_%s%s',roi_outputname,roi2_outputname,output_extension);
 	output = sprintf('%s\\%s', output_dir, output_filename);
-	
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TESTESTEST   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	current_roi_pairs = cat(1, roi_pairs, {roi, roi2});
     current_roi_pairs_names = cat(1, roi_pairs_names, {roifile, roi2file});
@@ -514,12 +515,14 @@ thread_count = str2num(get(handles.thread_count_input, 'string'));
 roi_pairs = getappdata(hMainGui, 'roi_pairs');
 output_list = getappdata(hMainGui, 'output_list');
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   START TRACKING   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 for i = 1:size(roi_pairs, 1)
 
 	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, char(output_list(i)));
 
-eval(strn)
+	eval(strn)
+	
 end
 
 % --- Executes when user attempts to close figure1.
@@ -530,18 +533,3 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 
 % Hint: delete(hObject) closes the figure
 delete(hObject);
-
-
-% --- Executes on button press in pushbutton_outputfile.
-function pushbutton_outputfile_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton_outputfile (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-hMainGui = getappdata(0, 'hMainGui');
-
-prompt = {'Output Directory:'};
-output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
-
-setappdata(hMainGui, 'output_dir', output_dir);
-set(handles.display_outputdir, 'string', output_dir);
