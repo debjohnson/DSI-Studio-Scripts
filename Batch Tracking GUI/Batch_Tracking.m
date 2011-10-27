@@ -393,7 +393,8 @@ if ~iscell(get(handles.temp_roi_pairs, 'string'));
 		output_extension = '.txt'
 	end
 
-	output_filename = sprintf('%s TO %s%s',roi_outputname,roi2_outputname,output_extension);
+	% output_filename = sprintf('%s TO %s%s',roi_outputname,roi2_outputname,output_extension);
+	output_filename = sprintf('%s%s',roi_outputname,output_extension);
 	output = sprintf('%s\\%s', output_dir, output_filename);
 	
 	output_list = {output};
@@ -437,7 +438,8 @@ else
 		output_extension = '.txt'
 	end
 
-	output_filename = sprintf('%s TO %s%s',roi_outputname,roi2_outputname,output_extension);
+	% output_filename = sprintf('%s TO %s%s',roi_outputname,roi2_outputname,output_extension);
+	output_filename = sprintf('%s%s',roi_outputname,output_extension);
 	output = sprintf('%s\\%s', output_dir, output_filename);
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   TESTESTEST   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
