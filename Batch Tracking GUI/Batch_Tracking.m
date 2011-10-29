@@ -382,8 +382,8 @@ function pushbutton_primary_roi_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-% [roifile, roipath] = uigetfile('C:\Users\*.nii','Select primary ROI file'); 
-[roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select primary ROI file'); 
+[roifile, roipath] = uigetfile('C:\Users\*.nii','Select primary ROI file'); 
+% [roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select primary ROI file'); 
 primary_roi = sprintf('%s%s',roipath,roifile);
 primary_roi_filename = roifile;
 [pathstr, primary_roi_outputname, ext] = fileparts(primary_roi);
@@ -409,8 +409,8 @@ primary_roi_outputname = getappdata(hMainGui, 'primary_roi_outputname');
 
 if ~iscell(get(handles.temp_roi_pairs, 'string'));
 
-	% [roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select second ROI file');
-	[roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
+	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select second ROI file');
+	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 	
 	roi_pairs = {primary_roi, roi2}; % Create array to store paths for first two ROI files
@@ -450,8 +450,8 @@ else
 	
     original_list = get(handles.listbox, 'string');
     
-	% [roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select first ROI file');
-	[roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file');
+	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select first ROI file');
+	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 
 	[pathstr, roi2_outputname, ext] = fileparts(roi2);
@@ -557,12 +557,29 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 % Hint: delete(hObject) closes the figure
 delete(hObject);
 
-
 % --- Executes on button press in save_button.
 function save_button_Callback(hObject, eventdata, handles)
 % hObject    handle to save_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+state.seed_count = str2num(get(handles.seed_count_input, 'string'));
+state.fa_threshold = str2num(get(handles.fa_thresh_input, 'string'));
+state.step_size = str2num(get(handles.step_size_input, 'string'));
+state.smoothing = str2num(get(handles.smoothing_input, 'string'));
+state.turning_angle = str2num(get(handles.turning_angle_input, 'string'));
+state.min_length = str2num(get(handles.min_input, 'string'));
+state.max_length = str2num(get(handles.max_input, 'string'));
+state.thread_count = str2num(get(handles.thread_count_input, 'string'));
+
+prompt = {'File name:'};
+dlg_title = 'Enter name for default values set';
+num_lines = 1;
+filename = inputdlg(prompt,dlg_title,num_lines);
+
+defaults_filename = sprintf('%s.mat',char(filename));
+
+save (defaults_filename,'state');
 
 
 % --- Executes on button press in load_button.
@@ -570,3 +587,17 @@ function load_button_Callback(hObject, eventdata, handles)
 % hObject    handle to load_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+[defaults_file, defaults_filepath] = uigetfile('C:\Users\*.mat','Select file to load saved defaults');
+defaults = sprintf('%s%s',defaults_filepath,defaults_file);
+
+load(defaults);
+
+set(handles.seed_count_input, 'string', state.seed_count);
+set(handles.fa_thresh_input, 'string', state.fa_threshold);
+set(handles.step_size_input, 'string', state.step_size);
+set(handles.smoothing_input, 'string', state.smoothing);
+set(handles.turning_angle_input, 'string', state.turning_angle);
+set(handles.min_input, 'string', state.min_length);
+set(handles.max_input, 'string', state.max_length);
+set(handles.thread_count_input, 'string', state.thread_count);
