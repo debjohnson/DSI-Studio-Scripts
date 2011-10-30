@@ -1,12 +1,14 @@
-%%==============================================================================%
-                         %BATCH TRACKING GUI FOR DSI STUDIO%
-%%==============================================================================%
+%%==============================================================================
+ %                        BATCH TRACKING GUI FOR DSI STUDIO
+%%==============================================================================
 
 %  
 % Batch_Tracking.m
 % 
 % This GUI is designed for batch tracking in DSI studio.
 % 
+%   10/27/11: Wrote It. (D. Johnson)
+%   10/27/11: Added text file output. (J. Pyles)
 % 
 
 function varargout = Batch_Tracking(varargin)
@@ -33,7 +35,7 @@ function varargout = Batch_Tracking(varargin)
 
 % Edit the above text to modify the response to help Batch_Tracking
 
-% Last Modified by GUIDE v2.5 29-Oct-2011 15:18:32
+% Last Modified by GUIDE v2.5 26-Oct-2011 11:50:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,7 +83,7 @@ setappdata(0, 'hMainGui', gcf);
 % set(handles.smoothing_input, 'string', .85);
 % set(handles.min_input, 'string', 20);
 % set(handles.max_input, 'string', 140);
-% set(handles.thread_count_input, 'string', 1);
+% set(handles.thread_count_input, 'string', 10);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = Batch_Tracking_OutputFcn(hObject, eventdata, handles) 
@@ -110,7 +112,7 @@ function pushbutton_dsi_studio_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-[dsi_studio, dsi_studio_path] = uigetfile('C:\Users\*.exe','Select DSI Studio'); % Path for DSI Studio
+[dsi_studio, dsi_studio_path] = uigetfile('*.exe','Select DSI Studio'); % Path for DSI Studio
 dsi_studio_pointer = sprintf('%s%s',dsi_studio_path,dsi_studio);
 
 setappdata(hMainGui, 'dsi_studio_pointer', dsi_studio_pointer);
@@ -126,7 +128,7 @@ function pushbutton_seed_file_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-[seed, seedpath] = uigetfile('C:\Users\*.nii','Select the seed file'); % Path for the seed file
+[seed, seedpath] = uigetfile('*.nii','Select the seed file'); % Path for the seed file
 seedfile = sprintf('%s%s',seedpath,seed);
 
 setappdata(hMainGui, 'seedfile', seedfile);
@@ -142,7 +144,7 @@ function pushbutton_fib_file_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-[fib, fibpath] = uigetfile('C:\Users\*.fib.gz','Select the .fib file'); % Path for .fib file
+[fib, fibpath] = uigetfile('*.fib.gz','Select the .fib file'); % Path for .fib file
 fibfile = sprintf('%s%s',fibpath,fib);
 
 setappdata(hMainGui, 'fibfile', fibfile);
@@ -361,12 +363,13 @@ function pushbutton_outputfile_Callback(hObject, eventdata, handles)
 hMainGui = getappdata(0, 'hMainGui');
 
 prompt = {'Output Directory:'};
-output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
+output_dir = uigetdir('*.*','Select location for output file'); % Specifies location for output file
 
 setappdata(hMainGui, 'output_dir', output_dir);
 set(handles.display_outputdir, 'string', output_dir);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   SPECIFY ROI FILES/PAIRS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 function counter_Callback(hObject, eventdata, handles)
 % hObject    handle to counter (see GCBO)
@@ -391,11 +394,12 @@ function pushbutton_add_ROI_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 output_dir = getappdata(hMainGui, 'output_dir');
+cd(output_dir); %added JP
 
 if ~iscell(get(handles.temp_roi_pairs, 'string'));
-	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file'); 
+	[roifile, roipath] = uigetfile('*.nii','Select first ROI file'); 
 	roi = sprintf('%s%s',roipath,roifile);
-	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select second ROI file');
+	[roi2file, roi2path] = uigetfile('*.nii','Select second ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 	
 	roi_pairs = {roi, roi2}; % Create array to store paths for first two ROI files
@@ -410,10 +414,10 @@ if ~iscell(get(handles.temp_roi_pairs, 'string'));
 	% Output file extension
 	if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
 		% Radio button is selected, take appropriate action
-		output_extension = '.trk'
+		output_extension = '.trk';
 	else
 		% Radio button is not selected, take appropriate action
-		output_extension = '.txt'
+		output_extension = '.txt';
 	end
 
 	output_filename = sprintf('%s_TO_%s%s',roi_outputname,roi2_outputname,output_extension);
@@ -436,9 +440,9 @@ else
 	
     original_list = get(handles.listbox, 'string');
     
-	[roifile, roipath] = uigetfile('C:\Users\*.nii','Select first ROI file');
+	[roifile, roipath] = uigetfile('*.nii','Select first ROI file');
 	roi = sprintf('%s%s',roipath,roifile);
-	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select first ROI file');
+	[roi2file, roi2path] = uigetfile('*.nii','Select first ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 
 	[pathstr, roi_outputname, ext] = fileparts(roi);
@@ -467,7 +471,7 @@ else
 	setappdata(hMainGui, 'output_list', output_list);
  
     newlist_items = sprintf('%s ; %s',roifile,roi2file);
-    t=[original_list; {newlist_items}]
+    t=[original_list; {newlist_items}];
     set(handles.listbox, 'string', t);
 end
 
@@ -525,20 +529,83 @@ max_length = str2num(get(handles.max_input, 'string'));
 thread_count = str2num(get(handles.thread_count_input, 'string'));
 roi_pairs = getappdata(hMainGui, 'roi_pairs');
 output_list = getappdata(hMainGui, 'output_list');
+output_dir = getappdata(hMainGui, 'output_dir');
+
+cd(output_dir);
+
+%% Setup Output txt File %%
+timedate = datestr(now);
+time=fix(clock);
+hour=num2str(time(4));
+minute=num2str(time(5));
+fOut = strcat('BatchTracking_',date,'-',hour,'-',minute,'_log.txt');
+%fOut = strcat('BatchTracking_','_log.txt')
+fid = fopen(fOut,'a+');
+%fid = fopen(fOut)
+
+if fid == -1
+	fprintf(1, 'File Not Opened Properly\n');
+	%sysbeep;
+end;
+
+fprintf(fid, '%s \n', fOut);
+fprintf(fid, '%s\n', datestr(now));
+fprintf(fid, 'Number of Sets of rois to track: %i \n', size(roi_pairs,1));
+fprintf(fid, 'Fib File: %s \n', fibfile);
+fprintf(fid, 'Seed File: %s \n', seedfile);
+fprintf(fid, 'FA Threshold: %4.4f \n', fa_threshold);
+fprintf(fid, 'Step Size: %4.2f mm \n', step_size);
+fprintf(fid, 'Smoothing: %4.2f mm \n', smoothing);
+fprintf(fid, 'Turning Angle: %i \n', turning_angle);
+fprintf(fid, 'Min Length: %i mm \n', min_length);
+fprintf(fid, 'Max Length: %i mm \n', max_length);
+fprintf(fid, 'Thread Count: %i mm \n', thread_count);
+
+fprintf(fid, '------------------------------------------------------------- \n\n');
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   START TRACKING   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-for i = 1:size(roi_pairs, 1)
-	
-	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, char(output_list(i)));
+starttime=clock;
 
-	eval(strn)
-	
-%%==============================================================================%%%
-%%                        ADD TEXT FILE OUTOPUT CODE HERE						%%%
-%%==============================================================================%%%
-	
+for i = 1:size(roi_pairs, 1)
+
+    %Record Info
+    disp('*** BATCH FIBER TRACKING ***');
+    fprintf(sprintf('\n\n -- Tracking Set %i of %i -- \n',i,size(roi_pairs,1)));
+    fprintf(fid,'\n\n -- Tracking Set %i of %i -- \n',i,size(roi_pairs,1));
+    fprintf(fid, 'Tracking Pair: %s \n', char(output_list(i)));
+    fprintf(fid, 'Start: %s \n', datestr(now));
+    %fprintf(sprintf('Tracking Pair: %s \n', char(output_list(i))));
+    disp(sprintf('Tracking Pair: %s ', char(output_list(i))))
+    fprintf(sprintf('Start: %s \n', datestr(now)));
+        
+    % Send Command to DSI Studio
+    strn = sprintf('!  %s --action=trk --thread_count=%i --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, thread_count, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, char(output_list(i)));
+    tic;
+	eval(strn) % send command to DSI Studio
+    tend=toc;
+    
+    % Record Info
+    fprintf(fid, 'Command sent to DSI Studio: %s \n', strn);  
+    fprintf(fid, 'End: %s \n', datestr(now));
+    fprintf(fid, 'Track time: %d min and %2.4f secs \n\n',floor(tend/60),rem(tend,60));
+    fprintf(sprintf('Track time: %d min and %2.4f secs \n',floor(tend/60),rem(tend,60)));
+    fprintf(sprintf('\n Tracking Set %i Finished! \n',i));
+
+    
 end
+
+endtime=clock;
+totaltime = etime(endtime,starttime);
+
+
+fprintf(fid, '\n\n ** Completed all at: %s **\n', datestr(now));
+fprintf(fid, '** Total time: %d min and %2.4f secs **\n',floor(totaltime/60),rem(totaltime,60));
+fprintf(sprintf('\n\n ** Completed all at: %s **\n', datestr(now)));
+fprintf(sprintf('** Total time: %d min and %2.4f secs **\n',floor(totaltime/60),rem(totaltime,60)));
+fprintf(sprintf('\n\n ALL FINISHED! \n'));
+fclose(fid);
 
 % --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
@@ -548,49 +615,3 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 
 % Hint: delete(hObject) closes the figure
 delete(hObject);
-
-
-% --- Executes on button press in save_button.
-function save_button_Callback(hObject, eventdata, handles)
-% hObject    handle to save_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-state.seed_count = str2num(get(handles.seed_count_input, 'string'));
-state.fa_threshold = str2num(get(handles.fa_thresh_input, 'string'));
-state.step_size = str2num(get(handles.step_size_input, 'string'));
-state.smoothing = str2num(get(handles.smoothing_input, 'string'));
-state.turning_angle = str2num(get(handles.turning_angle_input, 'string'));
-state.min_length = str2num(get(handles.min_input, 'string'));
-state.max_length = str2num(get(handles.max_input, 'string'));
-state.thread_count = str2num(get(handles.thread_count_input, 'string'));
-
-prompt = {'File name:'};
-dlg_title = 'Enter name for default values set';
-num_lines = 1;
-filename = inputdlg(prompt,dlg_title,num_lines);
-
-defaults_filename = sprintf('%s.mat',char(filename));
-
-save (defaults_filename,'state');
-
-
-% --- Executes on button press in load_button.
-function load_button_Callback(hObject, eventdata, handles)
-% hObject    handle to load_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-[defaults_file, defaults_filepath] = uigetfile('C:\Users\*.mat','Select file to load saved defaults');
-defaults = sprintf('%s%s',defaults_filepath,defaults_file);
-
-load(defaults);
-
-set(handles.seed_count_input, 'string', state.seed_count);
-set(handles.fa_thresh_input, 'string', state.fa_threshold);
-set(handles.step_size_input, 'string', state.step_size);
-set(handles.smoothing_input, 'string', state.smoothing);
-set(handles.turning_angle_input, 'string', state.turning_angle);
-set(handles.min_input, 'string', state.min_length);
-set(handles.max_input, 'string', state.max_length);
-set(handles.thread_count_input, 'string', state.thread_count);
