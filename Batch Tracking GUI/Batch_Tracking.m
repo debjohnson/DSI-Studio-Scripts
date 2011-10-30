@@ -115,7 +115,7 @@ function pushbutton_dsi_studio_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-[dsi_studio, dsi_studio_path] = uigetfile('C:\Users\*.exe','Select DSI Studio'); % Path for DSI Studio
+[dsi_studio, dsi_studio_path] = uigetfile('*.exe','Select DSI Studio'); % Path for DSI Studio
 dsi_studio_pointer = sprintf('%s%s',dsi_studio_path,dsi_studio);
 
 setappdata(hMainGui, 'dsi_studio_pointer', dsi_studio_pointer);
@@ -131,7 +131,7 @@ function pushbutton_seed_file_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-[seed, seedpath] = uigetfile('C:\Users\*.nii','Select the seed file'); % Path for the seed file
+[seed, seedpath] = uigetfile('*.nii','Select the seed file'); % Path for the seed file
 seedfile = sprintf('%s%s',seedpath,seed);
 
 setappdata(hMainGui, 'seedfile', seedfile);
@@ -147,7 +147,7 @@ function pushbutton_fib_file_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-[fib, fibpath] = uigetfile('C:\Users\*.fib.gz','Select the .fib file'); % Path for .fib file
+[fib, fibpath] = uigetfile('*.fib.gz','Select the .fib file'); % Path for .fib file
 fibfile = sprintf('%s%s',fibpath,fib);
 
 setappdata(hMainGui, 'fibfile', fibfile);
@@ -366,7 +366,7 @@ function pushbutton_outputfile_Callback(hObject, eventdata, handles)
 hMainGui = getappdata(0, 'hMainGui');
 
 prompt = {'Output Directory:'};
-output_dir = uigetdir('C:\Users\*.*','Select location for output file'); % Specifies location for output file
+output_dir = uigetdir('*.*','Select location for output file'); % Specifies location for output file
 
 setappdata(hMainGui, 'output_dir', output_dir);
 set(handles.display_outputdir, 'string', output_dir);
@@ -398,7 +398,7 @@ function pushbutton_primary_roi_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
-[roifile, roipath] = uigetfile('C:\Users\*.nii','Select primary ROI file'); 
+[roifile, roipath] = uigetfile('*.nii','Select primary ROI file'); 
 % [roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select primary ROI file'); 
 primary_roi = sprintf('%s%s',roipath,roifile);
 primary_roi_filename = roifile;
@@ -425,7 +425,7 @@ primary_roi_outputname = getappdata(hMainGui, 'primary_roi_outputname');
 
 if ~iscell(get(handles.temp_roi_pairs, 'string'));
 
-	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select second ROI file');
+	[roi2file, roi2path] = uigetfile('*.nii','Select second ROI file');
 	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 	
@@ -466,7 +466,7 @@ else
 	
     original_list = get(handles.listbox, 'string');
     
-	[roi2file, roi2path] = uigetfile('C:\Users\*.nii','Select first ROI file');
+	[roi2file, roi2path] = uigetfile('*.nii','Select first ROI file');
 	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file');
 	roi2 = sprintf('%s%s',roi2path,roi2file);
 
@@ -659,7 +659,7 @@ function load_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-[defaults_file, defaults_filepath] = uigetfile('C:\Users\*.mat','Select file to load saved defaults');
+[defaults_file, defaults_filepath] = uigetfile('*.mat','Select file to load saved defaults');
 defaults = sprintf('%s%s',defaults_filepath,defaults_file);
 
 load(defaults);
