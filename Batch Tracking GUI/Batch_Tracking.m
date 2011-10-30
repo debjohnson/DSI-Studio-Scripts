@@ -1,3 +1,19 @@
+%%==============================================================================%%
+%%                  BATCH TRACKING GUI FOR DSI STUDIO: VERSION 2				%%
+%%==============================================================================%%
+
+%  
+% Batch_Tracking.m
+% 
+% This GUI is designed for batch tracking in DSI studio. In this verison, the user selects one
+% primary ROI, and tracking is performed between the primary ROI and all others selected.
+%
+%
+%   10/27/11: Wrote It. (D. Johnson)
+% 
+%
+%
+
 function varargout = Batch_Tracking(varargin)
 % BATCH_TRACKING M-file for Batch_Tracking.fig
 %      BATCH_TRACKING, by itself, creates a new BATCH_TRACKING or raises the existing
