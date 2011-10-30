@@ -537,25 +537,81 @@ max_length = str2num(get(handles.max_input, 'string'));
 thread_count = str2num(get(handles.thread_count_input, 'string'));
 roi_pairs = getappdata(hMainGui, 'roi_pairs');
 output_list = getappdata(hMainGui, 'output_list');
+output_dir = getappdata(hMainGui, 'output_dir');
+
+cd(output_dir);
+
+%% Setup Output txt File %%
+timedate = datestr(now);
+time=fix(clock);
+hour=num2str(time(4));
+minute=num2str(time(5));
+fOut = strcat('BatchTracking_',date,'-',hour,'-',minute,'_log.txt');
+%fOut = strcat('BatchTracking_','_log.txt')
+fid = fopen(fOut,'a+');
+%fid = fopen(fOut)
+
+if fid == -1
+	fprintf(1, 'File Not Opened Properly\n');
+	%sysbeep;
+end;
+
+fprintf(fid, '%s \n', fOut);
+fprintf(fid, '%s\n', datestr(now));
+fprintf(fid, 'Number of Sets of rois to track: %i \n', size(roi_pairs,1));
+fprintf(fid, 'Fib File: %s \n', fibfile);
+fprintf(fid, 'Seed File: %s \n', seedfile);
+fprintf(fid, 'FA Threshold: %4.4f \n', fa_threshold);
+fprintf(fid, 'Step Size: %4.2f mm \n', step_size);
+fprintf(fid, 'Smoothing: %4.2f mm \n', smoothing);
+fprintf(fid, 'Turning Angle: %i \n', turning_angle);
+fprintf(fid, 'Min Length: %i mm \n', min_length);
+fprintf(fid, 'Max Length: %i mm \n', max_length);
+fprintf(fid, 'Thread Count: %i mm \n', thread_count);
+
+fprintf(fid, '------------------------------------------------------------- \n\n');
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   START TRACKING   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+starttime=clock;
+
 for i = 1:size(roi_pairs, 1)
 
-	strn = sprintf('!  %s --action=trk --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, char(output_list(i)));
+    %Record Info
+    disp('*** BATCH FIBER TRACKING ***');
+    fprintf(sprintf('\n\n -- Tracking Set %i of %i -- \n',i,size(roi_pairs,1)));
+    fprintf(fid,'\n\n -- Tracking Set %i of %i -- \n',i,size(roi_pairs,1));
+    fprintf(fid, 'Tracking Pair: %s \n', char(output_list(i)));
+    fprintf(fid, 'Start: %s \n', datestr(now));
+    %fprintf(sprintf('Tracking Pair: %s \n', char(output_list(i))));
+    disp(sprintf('Tracking Pair: %s ', char(output_list(i))))
+    fprintf(sprintf('Start: %s \n', datestr(now)));
 
-	eval(strn)
-	
+  	% Send Command to DSI Studio
+	  strn = sprintf('!  %s --action=trk --thread_count=%i --source=%s --method=0 --seed=%s --roi=%s --roi2=%s --seed_count=%i --fa_threshold=%i --turning_angle=%i --step_size=%i --smoothing=%i --min_length=%i --max_length=%i --output=%s',dsi_studio_pointer, thread_count, fibfile, seedfile, char(roi_pairs(i)), char(roi_pairs(i, 2)), seed_count, fa_threshold, turning_angle, step_size, smoothing, min_length, max_length, char(output_list(i)));
+	  tic;
+	  eval(strn) % send command to DSI Studio
+	  tend=toc;
+      
+	  % Record Info
+	  fprintf(fid, 'Command sent to DSI Studio: %s \n', strn);  
+	  fprintf(fid, 'End: %s \n', datestr(now));
+	  fprintf(fid, 'Track time: %d min and %2.4f secs \n\n',floor(tend/60),rem(tend,60));
+	  fprintf(sprintf('Track time: %d min and %2.4f secs \n',floor(tend/60),rem(tend,60)));
+	  fprintf(sprintf('\n Tracking Set %i Finished! \n',i));
+
 end
 
-% --- Executes when user attempts to close figure1.
-function figure1_CloseRequestFcn(hObject, eventdata, handles)
-% hObject    handle to figure1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+endtime=clock;
+totaltime = etime(endtime,starttime);
 
-% Hint: delete(hObject) closes the figure
-delete(hObject);
+fprintf(fid, '\n\n ** Completed all at: %s **\n', datestr(now));
+fprintf(fid, '** Total time: %d min and %2.4f secs **\n',floor(totaltime/60),rem(totaltime,60));
+fprintf(sprintf('\n\n ** Completed all at: %s **\n', datestr(now)));
+fprintf(sprintf('** Total time: %d min and %2.4f secs **\n',floor(totaltime/60),rem(totaltime,60)));
+fprintf(sprintf('\n\n ALL FINISHED! \n'));
+fclose(fid);
 
 % --- Executes on button press in save_button.
 function save_button_Callback(hObject, eventdata, handles)
@@ -581,7 +637,6 @@ defaults_filename = sprintf('%s.mat',char(filename));
 
 save (defaults_filename,'state');
 
-
 % --- Executes on button press in load_button.
 function load_button_Callback(hObject, eventdata, handles)
 % hObject    handle to load_button (see GCBO)
@@ -601,3 +656,12 @@ set(handles.turning_angle_input, 'string', state.turning_angle);
 set(handles.min_input, 'string', state.min_length);
 set(handles.max_input, 'string', state.max_length);
 set(handles.thread_count_input, 'string', state.thread_count);
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+delete(hObject);
