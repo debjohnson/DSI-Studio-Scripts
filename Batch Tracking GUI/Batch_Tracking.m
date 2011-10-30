@@ -1,6 +1,6 @@
-%%==============================================================================
- %                        BATCH TRACKING GUI FOR DSI STUDIO
-%%==============================================================================
+%%==============================================================================%%
+%%                        BATCH TRACKING GUI FOR DSI STUDIO						%%
+%%==============================================================================%%
 
 %  
 % Batch_Tracking.m
@@ -9,6 +9,7 @@
 % 
 %   10/27/11: Wrote It. (D. Johnson)
 %   10/27/11: Added text file output. (J. Pyles)
+%	10/30/11: Added save/load tracking parameters functions; merged changes from J. Pyles (D. Johnson)
 % 
 
 function varargout = Batch_Tracking(varargin)
@@ -76,14 +77,6 @@ guidata(hObject, handles);
 % uiwait(handles.figure1);
 
 setappdata(0, 'hMainGui', gcf);
-% set(handles.seed_count_input, 'string', 113,586,000);
-% set(handles.fa_thresh_input, 'string', 0.0241);
-% set(handles.step_size_input, 'string', 0.5);
-% set(handles.turning_angle_input, 'string', 80);
-% set(handles.smoothing_input, 'string', .85);
-% set(handles.min_input, 'string', 20);
-% set(handles.max_input, 'string', 140);
-% set(handles.thread_count_input, 'string', 10);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = Batch_Tracking_OutputFcn(hObject, eventdata, handles) 
@@ -97,8 +90,7 @@ function varargout = Batch_Tracking_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-
-% --------------------------------------------------------------------
+% ----------------------------------------------------------------------------------
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   SPECIFY FILE PATHS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -370,7 +362,6 @@ set(handles.display_outputdir, 'string', output_dir);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   SPECIFY ROI FILES/PAIRS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 function counter_Callback(hObject, eventdata, handles)
 % hObject    handle to counter (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -512,6 +503,7 @@ function pushbutton_start_tracking_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   GET ALL DATA FROM GUI   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 hMainGui = getappdata(0, 'hMainGui');
@@ -592,13 +584,11 @@ for i = 1:size(roi_pairs, 1)
     fprintf(fid, 'Track time: %d min and %2.4f secs \n\n',floor(tend/60),rem(tend,60));
     fprintf(sprintf('Track time: %d min and %2.4f secs \n',floor(tend/60),rem(tend,60)));
     fprintf(sprintf('\n Tracking Set %i Finished! \n',i));
-
-    
+  
 end
 
 endtime=clock;
 totaltime = etime(endtime,starttime);
-
 
 fprintf(fid, '\n\n ** Completed all at: %s **\n', datestr(now));
 fprintf(fid, '** Total time: %d min and %2.4f secs **\n',floor(totaltime/60),rem(totaltime,60));
@@ -606,6 +596,51 @@ fprintf(sprintf('\n\n ** Completed all at: %s **\n', datestr(now)));
 fprintf(sprintf('** Total time: %d min and %2.4f secs **\n',floor(totaltime/60),rem(totaltime,60)));
 fprintf(sprintf('\n\n ALL FINISHED! \n'));
 fclose(fid);
+
+% --- Executes on button press in save_button.
+function save_button_Callback(hObject, eventdata, handles)
+% hObject    handle to save_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+state.seed_count = str2num(get(handles.seed_count_input, 'string'));
+state.fa_threshold = str2num(get(handles.fa_thresh_input, 'string'));
+state.step_size = str2num(get(handles.step_size_input, 'string'));
+state.smoothing = str2num(get(handles.smoothing_input, 'string'));
+state.turning_angle = str2num(get(handles.turning_angle_input, 'string'));
+state.min_length = str2num(get(handles.min_input, 'string'));
+state.max_length = str2num(get(handles.max_input, 'string'));
+state.thread_count = str2num(get(handles.thread_count_input, 'string'));
+
+prompt = {'File name:'};
+dlg_title = 'Enter name for default values set';
+num_lines = 1;
+filename = inputdlg(prompt,dlg_title,num_lines);
+
+defaults_filename = sprintf('%s.mat',char(filename));
+
+save (defaults_filename,'state');
+
+% --- Executes on button press in load_button.
+function load_button_Callback(hObject, eventdata, handles)
+% hObject    handle to load_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+[defaults_file, defaults_filepath] = uigetfile('C:\Users\*.mat','Select file to load saved defaults');
+defaults = sprintf('%s%s',defaults_filepath,defaults_file);
+
+load(defaults);
+
+set(handles.seed_count_input, 'string', state.seed_count);
+set(handles.fa_thresh_input, 'string', state.fa_threshold);
+set(handles.step_size_input, 'string', state.step_size);
+set(handles.smoothing_input, 'string', state.smoothing);
+set(handles.turning_angle_input, 'string', state.turning_angle);
+set(handles.min_input, 'string', state.min_length);
+set(handles.max_input, 'string', state.max_length);
+set(handles.thread_count_input, 'string', state.thread_count);
+
 
 % --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
