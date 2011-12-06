@@ -428,7 +428,7 @@ else
 	setappdata(hMainGui, 'roi_names', current_roi_names);
 	setappdata(hMainGui, 'roi_outputnames', current_roi_outputnames);
  
-    newlist_items = sprintf('%s ; %s',roifile);
+    newlist_items = sprintf('%s',roifile);
     t=[original_list; {newlist_items}];
     set(handles.listbox, 'string', t);
 end
@@ -500,6 +500,23 @@ if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max
 else
 	% Radio button is not selected, take appropriate action
 	output_extension = '.txt'
+end
+
+
+for i = 1:size(roi_pairs, 1)
+	if ~exist output_list
+		[pathstr, roi_outputname, ext] = fileparts(char(roi_pairs(i)));
+		[pathstr, roi2_outputname, ext] = fileparts(char(roi_pairs(i, 2)));
+		output_filename = sprintf('%s_TO_%s%s',roi_outputname,roi2_outputname,output_extension);
+		output = sprintf('%s\\%s', output_dir, output_filename);
+		output_list = {output};
+	else
+		[pathstr, roi_outputname, ext] = fileparts(char(roi_pairs(i)));
+		[pathstr, roi2_outputname, ext] = fileparts(char(roi_pairs(i, 2)));
+		output_filename = sprintf('%s_TO_%s%s',roi_outputname,roi2_outputname,output_extension);
+		output = sprintf('%s\\%s', output_dir, output_filename);
+		output_list(end+1) = {output};
+	end
 end
 
 %% Setup Output txt File %%
