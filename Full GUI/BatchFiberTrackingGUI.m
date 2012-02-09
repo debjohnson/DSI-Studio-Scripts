@@ -1,15 +1,15 @@
 function varargout = BatchFiberTrackingGUI(varargin)
-% BatchFiberTrackingGUI M-file for BatchFiberTrackingGUI.fig
-%      BatchFiberTrackingGUI, by itself, creates a new BatchFiberTrackingGUI or raises the existing
+% BATCHFIBERTRACKINGGUI M-file for BatchFiberTrackingGUI.fig
+%      BATCHFIBERTRACKINGGUI, by itself, creates a new BATCHFIBERTRACKINGGUI or raises the existing
 %      singleton*.
 %
-%      H = BatchFiberTrackingGUI returns the handle to a new BatchFiberTrackingGUI or the handle to
+%      H = BATCHFIBERTRACKINGGUI returns the handle to a new BATCHFIBERTRACKINGGUI or the handle to
 %      the existing singleton*.
 %
-%      BatchFiberTrackingGUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in BatchFiberTrackingGUI.M with the given input arguments.
+%      BATCHFIBERTRACKINGGUI('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in BATCHFIBERTRACKINGGUI.M with the given input arguments.
 %
-%      BatchFiberTrackingGUI('Property','Value',...) creates a new BatchFiberTrackingGUI or raises the
+%      BATCHFIBERTRACKINGGUI('Property','Value',...) creates a new BATCHFIBERTRACKINGGUI or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
 %      applied to the GUI before BatchFiberTrackingGUI_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
@@ -22,7 +22,7 @@ function varargout = BatchFiberTrackingGUI(varargin)
 
 % Edit the above text to modify the response to help BatchFiberTrackingGUI
 
-% Last Modified by GUIDE v2.5 16-Nov-2011 12:50:10
+% Last Modified by GUIDE v2.5 09-Feb-2012 13:30:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -74,7 +74,7 @@ varargout{1} = handles.output;
 
 
 % --- Executes on button press in BatchFiberTrackingGUI.
-function BatchFiberTrackingGUI_Callback(hObject, eventdata, handles)
+function open_GUI_Callback(hObject, eventdata, handles)
 % hObject    handle to BatchFiberTrackingGUI (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
