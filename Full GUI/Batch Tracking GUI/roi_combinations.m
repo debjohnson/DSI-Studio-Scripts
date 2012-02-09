@@ -476,18 +476,19 @@ function pushbutton_start_tracking_Callback(hObject, eventdata, handles)
 hMainGui = getappdata(0, 'hMainGui');
 
 dsi_studio_pointer = getappdata(hMainGui, 'dsi_studio_pointer');
-seedfile = getappdata(hMainGui, 'seedfile');
-fibfile = getappdata(hMainGui, 'fibfile');
-seed_count = str2num(get(handles.seed_count_input, 'string'));
-fa_threshold = str2num(get(handles.fa_thresh_input, 'string'));
-step_size = str2num(get(handles.step_size_input, 'string'));
-smoothing = str2num(get(handles.smoothing_input, 'string'));
-turning_angle = str2num(get(handles.turning_angle_input, 'string'));
-min_length = str2num(get(handles.min_input, 'string'));
-max_length = str2num(get(handles.max_input, 'string'));
-thread_count = str2num(get(handles.thread_count_input, 'string'));
-file_list = getappdata(hMainGui, 'file_list'); 
-output_dir = getappdata(hMainGui, 'output_dir');
+seedfile           = getappdata(hMainGui, 'seedfile');
+fibfile            = getappdata(hMainGui, 'fibfile');
+seed_count         = str2num(strrep(get(handles.seed_count_input, 'string'), ',', ''));
+fa_threshold       = str2num(get(handles.fa_thresh_input, 'string'));
+step_size          = str2num(get(handles.step_size_input, 'string'));
+smoothing          = str2num(get(handles.smoothing_input, 'string'));
+turning_angle      = str2num(get(handles.turning_angle_input, 'string'));
+min_length         = str2num(get(handles.min_input, 'string'));
+max_length         = str2num(get(handles.max_input, 'string'));
+thread_count       = str2num(get(handles.thread_count_input, 'string'));
+file_list          = getappdata(hMainGui, 'file_list'); 
+output_dir         = getappdata(hMainGui, 'output_dir');
+
 cd(output_dir);
 
 % Create array with all possible combinations of ROI files
