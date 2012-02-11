@@ -300,8 +300,9 @@ if ~iscell(get(handles.temp_roi_pairs, 'string'));
 	
 	%%==============================================     File names for output files
 	
-	[pathstr, roi_outputname, ext] = fileparts(roi);
+	[pathstr, roi_outputname, ext]  = fileparts(roi);
 	[pathstr, roi2_outputname, ext] = fileparts(roi2);
+
 	roi_outputnames = {roi_outputname, roi2_outputname};
 	
 	% Output file extension
@@ -331,7 +332,7 @@ else
 	roi_outputnames = getappdata(hMainGui, 'roi_outputnames');
 	output_list     = getappdata(hMainGui, 'output_list');
 	
-    original_list = get(handles.listbox, 'string');
+  original_list = get(handles.listbox, 'string');
     
 	[roifile, roipath] = uigetfile('*.nii','Select first ROI file');
 	roi = sprintf('%s%s',roipath,roifile);

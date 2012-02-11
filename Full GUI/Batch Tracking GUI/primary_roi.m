@@ -1,5 +1,5 @@
 %%==============================================================================%%
-%%                  BATCH TRACKING GUI FOR DSI STUDIO: VERSION 2				%%
+%%                  BATCH TRACKING GUI FOR DSI STUDIO: VERSION 2								%%
 %%==============================================================================%%
 
 %  
@@ -392,85 +392,37 @@ function counter_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on button press in pushbutton_primary_roi.
 function pushbutton_primary_roi_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton_primary_roi (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-hMainGui = getappdata(0, 'hMainGui');
-
-[roifile, roipath] = uigetfile('*.nii','Select primary ROI file'); 
-% [roifile, roipath] = uigetfile('/Users/Deb/Desktop/*.nii','Select primary ROI file'); 
-primary_roi = sprintf('%s%s',roipath,roifile);
-primary_roi_filename = roifile;
-[pathstr, primary_roi_outputname, ext] = fileparts(primary_roi);
-
-setappdata(hMainGui, 'primary_roi', primary_roi);
-setappdata(hMainGui, 'primary_roi_filename', primary_roi_filename);
-setappdata(hMainGui, 'primary_roi_outputname', primary_roi_outputname);
-set(handles.display_primary_roi, 'string', roifile);
+	
+	hMainGui = getappdata(0, 'hMainGui');
+	
+	[roifile, roipath] = uigetfile('*.nii','Select primary ROI file');
+	% If user clicks cancel after opening dialog box, clear the variables roifile, roipath
+	if isequal(roifile, 0);
+		clearvars roifile roipath;
+	else
+		primary_roi = sprintf('%s%s',roipath,roifile);
+		primary_roi_filename = roifile;
+		[pathstr, primary_roi_outputname, ext] = fileparts(primary_roi);
+	
+		% Set variables so they are accessible from other functions
+		setappdata(hMainGui, 'primary_roi', primary_roi);
+		setappdata(hMainGui, 'primary_roi_filename', primary_roi_filename);
+		setappdata(hMainGui, 'primary_roi_outputname', primary_roi_outputname);
+		setappdata(hMainGui, 'default_directory', roipath);
+		set(handles.display_primary_roi, 'string', roifile);	
+	end
 
 %%===============================================================     OTHER ROIS
 
 % --- Executes on button press in pushbutton_add_ROI.
 function pushbutton_add_ROI_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton_add_ROI (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-hMainGui = getappdata(0, 'hMainGui');
-output_dir = getappdata(hMainGui, 'output_dir');
-primary_roi = getappdata(hMainGui, 'primary_roi');
-primary_roi_filename = getappdata(hMainGui, 'primary_roi_filename');
-primary_roi_outputname = getappdata(hMainGui, 'primary_roi_outputname');
-
-if ~iscell(get(handles.temp_roi_pairs, 'string'));
-
-	[roi2file, roi2path] = uigetfile('*.nii','Select second ROI file');
-	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select second ROI file');
-	roi2 = sprintf('%s%s',roi2path,roi2file);
-	
-	roi_pairs = {primary_roi, roi2}; % Create array to store paths for first two ROI files
-	roi_pairs_names = {primary_roi_filename, roi2file};
-	
-	%%==============================================     File names for output files
-	
-	[pathstr, roi2_outputname, ext] = fileparts(roi2);
-	roi_outputnames = {primary_roi_outputname, roi2_outputname};
-	
-	% Output file extension
-	if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
-		% Radio button is selected, take appropriate action
-		output_extension = '.trk'
-	else
-		% Radio button is not selected, take appropriate action
-		output_extension = '.txt'
-	end
-
-	output_filename = sprintf('%s_TO_%s%s',primary_roi_outputname,roi2_outputname,output_extension);
-	output = sprintf('%s\\%s', output_dir, output_filename);
-	output_list = {output};
-	
-	setappdata(hMainGui, 'roi_pairs', roi_pairs);
-	setappdata(hMainGui, 'roi_pairs_names', roi_pairs_names);
-    setappdata(hMainGui, 'roi_outputnames', roi_outputnames);
-	setappdata(hMainGui, 'output_list', output_list);
-
-    set(handles.temp_roi_pairs, 'string', roi_pairs);
-    set(handles.listbox, 'string', sprintf('%s',roi2file));
-else
-	hMainGui = getappdata(0, 'hMainGui');
-	roi_pairs = getappdata(hMainGui, 'roi_pairs');
-	roi_pairs_names = getappdata(hMainGui, 'roi_pairs_names');
-	roi_outputnames = getappdata(hMainGui, 'roi_outputnames');
-	output_list = getappdata(hMainGui, 'output_list');
-	
-    original_list = get(handles.listbox, 'string');
-    
-	[roi2file, roi2path] = uigetfile('*.nii','Select first ROI file');
-	% [roi2file, roi2path] = uigetfile('/Users/Deb/Desktop/*.nii','Select first ROI file');
-	roi2 = sprintf('%s%s',roi2path,roi2file);
-
-	[pathstr, roi2_outputname, ext] = fileparts(roi2);
+	hMainGui               = getappdata(0, 'hMainGui');
+	output_dir             = getappdata(hMainGui, 'output_dir');
+	primary_roi            = getappdata(hMainGui, 'primary_roi');
+	primary_roi_filename   = getappdata(hMainGui, 'primary_roi_filename');
+	primary_roi_outputname = getappdata(hMainGui, 'primary_roi_outputname');
+	default_directory      = getappdata(hMainGui, 'default_directory');
 
 	% Output file extension
 	if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
@@ -481,23 +433,126 @@ else
 		output_extension = '.txt'
 	end
 
-	output_filename = sprintf('%s_TO_%s%s',primary_roi_outputname,roi2_outputname,output_extension);
-	output = sprintf('%s\\%s', output_dir, output_filename);
+	[roi2file, roi2path] = uigetfile('*.nii','Select second ROI file', default_directory, 'Multiselect', 'on');
 
-	current_roi_pairs = cat(1, roi_pairs, {primary_roi, roi2});
-    current_roi_pairs_names = cat(1, roi_pairs_names, {primary_roi_filename, roi2file});
-	current_roi_outputnames = cat(1, roi_outputnames, {primary_roi_outputname, roi2_outputname});
-	output_list(end+1) = {output};
-    
-	setappdata(hMainGui, 'roi_pairs', current_roi_pairs);
-	setappdata(hMainGui, 'roi_pairs_names', current_roi_pairs_names);
-	setappdata(hMainGui, 'roi_outputnames', current_roi_outputnames);
-	setappdata(hMainGui, 'output_list', output_list);
- 
-    newlist_items = sprintf('%s',roi2file);
-    t=[original_list; {newlist_items}]
-    set(handles.listbox, 'string', t);
-end
+	if ~iscell(get(handles.temp_roi_pairs, 'string')); % If this is the first time they've clicked the 'Add ROIs' button
+		if ~iscell(roi2file); % If user only selected one file:
+			roi2 = sprintf('%s%s',roi2path,roi2file);
+			% Create array to store paths for first two ROI files
+			roi_pairs = {primary_roi, roi2};
+			roi_pairs_names = {primary_roi_filename, roi2file};
+
+			%%==============================================     File names for output files
+			[pathstr, roi2_outputname, ext] = fileparts(roi2);
+			roi_outputnames = {primary_roi_outputname, roi2_outputname};
+
+			output_filename = sprintf('%s_TO_%s%s',primary_roi_outputname,roi2_outputname,output_extension);
+			output = sprintf('%s\\%s', output_dir, output_filename);
+			output_list = {output};
+
+			setappdata(hMainGui, 'roi_pairs', roi_pairs);
+			setappdata(hMainGui, 'roi_pairs_names', roi_pairs_names);
+			setappdata(hMainGui, 'roi_outputnames', roi_outputnames);
+			setappdata(hMainGui, 'output_list', output_list);
+
+			set(handles.temp_roi_pairs, 'string', roi_pairs);
+			set(handles.listbox, 'string', sprintf('%s',roi2file));
+
+		else % If user selected more than one file, transpose the array that uigetfile returns
+			roi2files = roi2file(:);
+			roi2 = sprintf('%s%s',roi2path,char(roi2files(1)));
+			% Create array to store paths for first two ROI files
+			roi_pairs = {primary_roi, roi2};
+			roi_pairs_names = {primary_roi_filename, roi2file};
+
+			%%==============================================     File names for output files
+			[pathstr, roi2_outputname, ext] = fileparts(roi2);
+			roi_outputnames = {primary_roi_outputname, roi2_outputname};
+
+			output_filename = sprintf('%s_TO_%s%s',primary_roi_outputname,roi2_outputname,output_extension);
+			output = sprintf('%s\\%s', output_dir, output_filename);
+			output_list = {output};
+
+	        set(handles.temp_roi_pairs, 'string', roi_pairs);
+	        set(handles.listbox, 'string', sprintf('%s',roi2file));
+
+			for i = 2:size(roi2files);
+				roi2 = sprintf('%s%s',roi2path,char(roi2files(i)));
+				[pathstr, roi2_outputname, ext] = fileparts(char(roi2files(i)));
+
+				output_filename = sprintf('%s_TO_%s%s',primary_roi_outputname,roi2_outputname,output_extension);
+				output = sprintf('%s\\%s', output_dir, output_filename);
+
+				current_roi_pairs        = cat(1, roi_pairs, {primary_roi, roi2});
+	            current_roi_pairs_names  = cat(1, roi_pairs_names, {primary_roi_filename, char(roi2files(i))});
+				current_roi_outputnames  = cat(1, roi_outputnames, {primary_roi_outputname, roi2_outputname});
+				output_list(end+1) = {output};
+			end
+				setappdata(hMainGui, 'roi_pairs', current_roi_pairs);
+				setappdata(hMainGui, 'roi_pairs_names', current_roi_pairs_names);
+				setappdata(hMainGui, 'roi_outputnames', current_roi_outputnames);
+				setappdata(hMainGui, 'output_list', output_list);
+
+				newlist_items = sprintf('%s',roi2file);
+			 	t=[original_list; {newlist_items}]
+				set(handles.listbox, 'string', t);
+		end
+	else % This is not the first time the button was clicked, so get the variables stored in the GUI
+
+		hMainGui        = getappdata(0, 'hMainGui');
+		roi_pairs       = getappdata(hMainGui, 'roi_pairs');
+		roi_pairs_names = getappdata(hMainGui, 'roi_pairs_names');
+		roi_outputnames = getappdata(hMainGui, 'roi_outputnames');
+		output_list     = getappdata(hMainGui, 'output_list');
+	     original_list = get(handles.listbox, 'string');
+
+		if ~iscell(roi2file); % If they only selected one file 1 file
+
+			roi2 = sprintf('%s%s',roi2path,roi2file);
+			[pathstr, roi2_outputname, ext] = fileparts(roi2);
+			% Output file extension
+
+			output_filename = sprintf('%s_TO_%s%s',primary_roi_outputname,roi2_outputname,output_extension);
+			output = sprintf('%s\\%s', output_dir, output_filename);
+
+			current_roi_pairs        = cat(1, roi_pairs, {primary_roi, roi2});
+	        current_roi_pairs_names  = cat(1, roi_pairs_names, {primary_roi_filename, roi2file});
+			current_roi_outputnames  = cat(1, roi_outputnames, {primary_roi_outputname, roi2_outputname});
+			output_list(end+1) = {output};
+
+			setappdata(hMainGui, 'roi_pairs', current_roi_pairs);
+			setappdata(hMainGui, 'roi_pairs_names', current_roi_pairs_names);
+			setappdata(hMainGui, 'roi_outputnames', current_roi_outputnames);
+			setappdata(hMainGui, 'output_list', output_list);
+
+	  	newlist_items = sprintf('%s',roi2file);
+	  	t=[original_list; {newlist_items}]
+	  	set(handles.listbox, 'string', t);
+		else % If they selected multiple files
+			roi2files = roi2file(:);
+
+			for i = 1:size(roi2files);
+				roi2 = sprintf('%s%s',roi2path,char(roi2files(i)));
+				[pathstr, roi2_outputname, ext] = fileparts(char(roi2files(i)));
+
+				output_filename = sprintf('%s_TO_%s%s',primary_roi_outputname,roi2_outputname,output_extension);
+				output = sprintf('%s\\%s', output_dir, output_filename);
+
+				current_roi_pairs        = cat(1, roi_pairs, {primary_roi, roi2});
+	      current_roi_pairs_names  = cat(1, roi_pairs_names, {primary_roi_filename, char(roi2files(i))});
+				current_roi_outputnames  = cat(1, roi_outputnames, {primary_roi_outputname, roi2_outputname});
+				output_list(end+1) = {output};
+	      newlist_items = sprintf('%s',char(roi2file(i)));
+			 	t=[original_list; {newlist_items}]
+			end
+				setappdata(hMainGui, 'roi_pairs', current_roi_pairs);
+				setappdata(hMainGui, 'roi_pairs_names', current_roi_pairs_names);
+				setappdata(hMainGui, 'roi_outputnames', current_roi_outputnames);
+				setappdata(hMainGui, 'output_list', output_list);
+
+				set(handles.listbox, 'string', t);
+		end
+	end
 
 % --- Executes on selection change in listbox.
 function listbox_Callback(hObject, eventdata, handles)
@@ -540,20 +595,21 @@ function pushbutton_start_tracking_Callback(hObject, eventdata, handles)
 
 hMainGui = getappdata(0, 'hMainGui');
 
+
 dsi_studio_pointer = getappdata(hMainGui, 'dsi_studio_pointer');
-seedfile = getappdata(hMainGui, 'seedfile');
-fibfile = getappdata(hMainGui, 'fibfile');
-seed_count = str2num(get(handles.seed_count_input, 'string'));
-fa_threshold = str2num(get(handles.fa_thresh_input, 'string'));
-step_size = str2num(get(handles.step_size_input, 'string'));
-smoothing = str2num(get(handles.smoothing_input, 'string'));
-turning_angle = str2num(get(handles.turning_angle_input, 'string'));
-min_length = str2num(get(handles.min_input, 'string'));
-max_length = str2num(get(handles.max_input, 'string'));
-thread_count = str2num(get(handles.thread_count_input, 'string'));
-roi_pairs = getappdata(hMainGui, 'roi_pairs');
-output_list = getappdata(hMainGui, 'output_list');
-output_dir = getappdata(hMainGui, 'output_dir');
+seedfile           = getappdata(hMainGui, 'seedfile');
+fibfile            = getappdata(hMainGui, 'fibfile');
+seed_count         = str2num(strrep(get(handles.seed_count_input, 'string'), ',', ''));
+fa_threshold       = str2num(get(handles.fa_thresh_input, 'string'));
+step_size          = str2num(get(handles.step_size_input, 'string'));
+smoothing          = str2num(get(handles.smoothing_input, 'string'));
+turning_angle      = str2num(get(handles.turning_angle_input, 'string'));
+min_length         = str2num(get(handles.min_input, 'string'));
+max_length         = str2num(get(handles.max_input, 'string'));
+thread_count       = str2num(get(handles.thread_count_input, 'string'));
+roi_pairs          = getappdata(hMainGui, 'roi_pairs');
+output_list        = getappdata(hMainGui, 'output_list');
+output_dir         = getappdata(hMainGui, 'output_dir');
 
 cd(output_dir);
 
