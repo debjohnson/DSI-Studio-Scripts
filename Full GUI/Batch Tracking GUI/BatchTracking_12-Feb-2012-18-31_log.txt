@@ -1,0 +1,45 @@
+BatchTracking_12-Feb-2012-18-31_log.txt 
+12-Feb-2012 18:31:08
+Number of Sets of rois to track: 3 
+Fib File: /Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/roi_pairs.m 
+Seed File: /Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/primary_roi.fig 
+FA Threshold: 0.0241 
+Step Size: 0.02 mm 
+Smoothing: 0.85 mm 
+Turning Angle: 80 
+Min Length: 20 mm 
+Max Length: 140 mm 
+Thread Count: 1 mm 
+------------------------------------------------------------- 
+
+
+
+ -- Tracking Set 1 of 3 -- 
+Tracking Pair: /Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI\Experiment 1b Revised_TO_LeJoTa_Submitted_V1 (APA 6).trk 
+Start: 12-Feb-2012 18:31:08 
+Command sent to DSI Studio: !  /Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/roi_combinations.m --action=trk --thread_count=1 --source=/Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/roi_pairs.m --method=0 --seed=/Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/primary_roi.fig --roi=/Users/Deb/Desktop/Active/Experiment 1b Revised.docx --roi2=/Users/Deb/Desktop/Active/LeJoTa_Submitted_V1 (APA 6).docx --seed_count=113586000 --fa_threshold=2.410000e-02 --turning_angle=80 --step_size=2.410000e-02 --smoothing=8.500000e-01 --min_length=20 --max_length=140 --output=/Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI\Experiment 1b Revised_TO_LeJoTa_Submitted_V1 (APA 6).trk 
+End: 12-Feb-2012 18:31:08 
+Track time: 0 min and 0.0536 secs 
+
+
+
+ -- Tracking Set 2 of 3 -- 
+Tracking Pair: /Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI\Experiment 1b Revised_TO_revised1 copy.trk 
+Start: 12-Feb-2012 18:31:08 
+Command sent to DSI Studio: !  /Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/roi_combinations.m --action=trk --thread_count=1 --source=/Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/roi_pairs.m --method=0 --seed=/Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/primary_roi.fig --roi=/Users/Deb/Desktop/Active/Experiment 1b Revised.docx --roi2=/Users/Deb/Desktop/Active/revised1 copy.docx --seed_count=113586000 --fa_threshold=2.410000e-02 --turning_angle=80 --step_size=2.410000e-02 --smoothing=8.500000e-01 --min_length=20 --max_length=140 --output=/Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI\Experiment 1b Revised_TO_revised1 copy.trk 
+End: 12-Feb-2012 18:31:08 
+Track time: 0 min and 0.0049 secs 
+
+
+
+ -- Tracking Set 3 of 3 -- 
+Tracking Pair: /Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI\Experiment 1b Revised_TO_revised1.trk 
+Start: 12-Feb-2012 18:31:08 
+Command sent to DSI Studio: !  /Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/roi_combinations.m --action=trk --thread_count=1 --source=/Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/roi_pairs.m --method=0 --seed=/Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI/primary_roi.fig --roi=/Users/Deb/Desktop/Active/Experiment 1b Revised.docx --roi2=/Users/Deb/Desktop/Active/revised1.docx --seed_count=113586000 --fa_threshold=2.410000e-02 --turning_angle=80 --step_size=2.410000e-02 --smoothing=8.500000e-01 --min_length=20 --max_length=140 --output=/Users/Deb/Desktop/Active/DSI-Studio-Scripts--Git-/Full GUI/Batch Tracking GUI\Experiment 1b Revised_TO_revised1.trk 
+End: 12-Feb-2012 18:31:08 
+Track time: 0 min and 0.0048 secs 
+
+
+
+ ** Completed all at: 12-Feb-2012 18:31:08 **
+** Total time: 0 min and 0.1024 secs **
