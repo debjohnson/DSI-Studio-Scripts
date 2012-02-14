@@ -80,13 +80,15 @@ guidata(hObject, handles);
 
 setappdata(0, 'hMainGui', gcf);
 hMainGui = getappdata(0, 'hMainGui');
-roi_pairs = {}
-roi2files = {}
-roi_outputnames = {}
-output_list = {}
+roi_pairs = {};
+roi2files = {};
+roi_outputnames = {};
+roi_pairs_names = {};
+output_list = {};
 setappdata(hMainGui, 'roi_pairs', roi_pairs);
 setappdata(hMainGui, 'roi2files', roi2files);
 setappdata(hMainGui, 'roi_outputnames', roi_outputnames);
+setappdata(hMainGui, 'roi_pairs_names', roi_pairs_names);
 setappdata(hMainGui, 'output_list', output_list);
 
 % --- Outputs from this function are returned to the command line.
@@ -158,200 +160,72 @@ set(handles.display_fib_file, 'string', fib);
 
 %%===============================================================     SEED COUNT
 
-function seed_count_input_Callback(hObject, eventdata, handles)
-% hObject    handle to seed_count_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of seed_count_input as text
-%        str2double(get(hObject,'String')) returns contents of seed_count_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'seed_count', get(hObject, 'string'))
-
 % --- Executes during object creation, after setting all properties.
 function seed_count_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to seed_count_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 %%=============================================================     FA THRESHOLD
 
-function fa_thresh_input_Callback(hObject, eventdata, handles)
-% hObject    handle to fa_thresh_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of fa_thresh_input as text
-%        str2double(get(hObject,'String')) returns contents of fa_thresh_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'fa_threshold', get(hObject, 'string'))
-
 % --- Executes during object creation, after setting all properties.
 function fa_thresh_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to fa_thresh_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 %%================================================================     STEP SIZE
 
-function step_size_input_Callback(hObject, eventdata, handles)
-% hObject    handle to step_size_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of step_size_input as text
-%        str2double(get(hObject,'String')) returns contents of step_size_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'step_size', get(hObject, 'string'))
-
 % --- Executes during object creation, after setting all properties.
 function step_size_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to step_size_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 %%============================================================     TURNING ANGLE
 
-function turning_angle_input_Callback(hObject, eventdata, handles)
-% hObject    handle to turning_angle_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of turning_angle_input as text
-%        str2double(get(hObject,'String')) returns contents of turning_angle_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'turning_angle', get(hObject, 'string'))
-
 % --- Executes during object creation, after setting all properties.
 function turning_angle_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to turning_angle_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 %%================================================================     SMOOTHING
 
-function smoothing_input_Callback(hObject, eventdata, handles)
-% hObject    handle to smoothing_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of smoothing_input as text
-%        str2double(get(hObject,'String')) returns contents of smoothing_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'smoothing', get(hObject, 'string'))
-
 % --- Executes during object creation, after setting all properties.
 function smoothing_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to smoothing_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 %%===================================================================     MIN
 
-function min_input_Callback(hObject, eventdata, handles)
-% hObject    handle to min_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of min_input as text
-%        str2double(get(hObject,'String')) returns contents of min_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'min_length', get(hObject, 'string'))
-
 % --- Executes during object creation, after setting all properties.
 function min_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to min_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 %%======================================================================     MAX
 
-function max_input_Callback(hObject, eventdata, handles)
-% hObject    handle to max_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of max_input as text
-%        str2double(get(hObject,'String')) returns contents of max_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'max_length', get(hObject, 'string'))
-
 % --- Executes during object creation, after setting all properties.
 function max_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to max_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 %%=============================================================     THREAD COUNT
 
-function thread_count_input_Callback(hObject, eventdata, handles)
-% hObject    handle to thread_count_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of thread_count_input as text
-%        str2double(get(hObject,'String')) returns contents of thread_count_input as a double
-
-hMainGui = getappdata(0, 'hMainGui');
-setappdata(hMainGui, 'thread_count', get(hObject, 'string'))
-
 % --- Executes during object creation, after setting all properties.
 function thread_count_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to thread_count_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -360,9 +234,6 @@ end
 
 % --- Executes on button press in pushbutton_outputfile.
 function pushbutton_outputfile_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton_outputfile (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 hMainGui = getappdata(0, 'hMainGui');
 
@@ -407,13 +278,11 @@ function pushbutton_primary_roi_Callback(hObject, eventdata, handles)
 		primary_roi = sprintf('%s%s',roipath,roifile);
 		primary_roi_filename = roifile;
     [pathstr, primary_roi_outputname, ext] = fileparts(primary_roi);
-    roi_pairs_names = {};
 		% Set variables so they are accessible from other functions
 		setappdata(hMainGui, 'primary_roi', primary_roi);
 		setappdata(hMainGui, 'primary_roi_filename', primary_roi_filename);
 		setappdata(hMainGui, 'primary_roi_outputname', primary_roi_outputname);
 		setappdata(hMainGui, 'default_directory', roipath);
-    setappdata(hMainGui, 'roi_pairs_names', roi_pairs_names);
 		setappdata(hMainGui, 'roipath', roipath);
 		set(handles.display_primary_roi, 'string', roifile);	
 	end
@@ -441,21 +310,10 @@ function pushbutton_add_ROI_Callback(hObject, eventdata, handles)
 
 % --- Executes on selection change in listbox.
 function listbox_Callback(hObject, eventdata, handles)
-% hObject    handle to listbox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = get(hObject,'String') returns listbox contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listbox
 
 % --- Executes during object creation, after setting all properties.
 function listbox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listbox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: listbox controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -464,17 +322,11 @@ end
 % 
 % % --- Executes on button press in pushbutton_clear.
 % function pushbutton_clear_Callback(hObject, eventdata, handles)
-% % hObject    handle to pushbutton_clear (see GCBO)
-% % eventdata  reserved - to be defined in a future version of MATLAB
-% % handles    structure with handles and user data (see GUIDATA)
 % 
 % set(handles.temp_roi_pairs, 'string', '');
 
 % --- Executes on button press in pushbutton_start_tracking.
 function pushbutton_start_tracking_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton_start_tracking (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   GET ALL DATA FROM GUI   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -512,31 +364,31 @@ else
 end
 
 for i = 1:size(roi2files);
-	roi2 = sprintf('%s%s',roipath,char(roi2files(i)));
-	roi_pairs = cat(1, roi_pairs, {primary_roi, roi2});
+	roi2            = sprintf('%s%s',roipath,char(roi2files(i)));
+	roi_pairs       = cat(1, roi_pairs, {primary_roi, roi2});
 	roi_pairs_names = cat (1, roi_pairs_names, {primary_roi_filename, roi2files(i)});
 	[pathstr, roi2_outputname, ext] = fileparts(roi2);
 	roi_outputnames = cat(1, roi_outputnames, {primary_roi_outputname, roi2_outputname});
 	output_filename = sprintf('%s_TO_%s%s',primary_roi_outputname,roi2_outputname,output_extension);
-	output = sprintf('%s\\%s', output_dir, output_filename);
-	output_list = cat(1, output_list, output);
+	output          = sprintf('%s\\%s', output_dir, output_filename);
+	output_list     = cat(1, output_list, output);
 end
 
 cd(output_dir);
 
 %% Setup Output txt File %%
 timedate = datestr(now);
-time=fix(clock);
-hour=num2str(time(4));
-minute=num2str(time(5));
-fOut = strcat('BatchTracking_',date,'-',hour,'-',minute,'_log.txt');
-%fOut = strcat('BatchTracking_','_log.txt')
-fid = fopen(fOut,'a+');
-%fid = fopen(fOut)
+time     = fix(clock);
+hour     = num2str(time(4));
+minute   = num2str(time(5));
+fOut     = strcat('BatchTracking_',date,'-',hour,'-',minute,'_log.txt');
+%fOut    = strcat('BatchTracking_','_log.txt')
+fid      = fopen(fOut,'a+');
+%fid     = fopen(fOut)
+
 
 if fid == -1
 	fprintf(1, 'File Not Opened Properly\n');
-	%sysbeep;
 end;
 
 fprintf(fid, '%s \n', fOut);
