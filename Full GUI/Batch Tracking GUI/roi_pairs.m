@@ -225,42 +225,36 @@ function add_ROI_button_Callback(hObject, eventdata, handles)
   setappdata(hMainGui, 'roipath', roipath)
   set(handles.listbox, 'string', display_list);
 
-%%==========================================================     CLEAR ROI FILES
+%%==========================================================     CLEAR ROI PAIR
 % ------ Function executes when clear_button is pressed. ------ %
 
 function clear_button_Callback(hObject, eventdata, handles)
 
 	hMainGui        = getappdata(0, 'hMainGui');
 	roi_pairs_files = getappdata(hMainGui, 'roi_pairs_files');
-	display_list    = getappdata(hMainGui, 'display_list');
 	
 	item_selected = get(handles.listbox, 'Value');
 	roi_pairs_files(item_selected, :) = [];
-	display_list(item_selected) = [];
 	
 	setappdata(hMainGui, 'roi_pairs_files', roi_pairs_files);
-	setappdata(hMainGui, 'display_list', display_list);
-	set(handles.listbox, 'string', display_list);
+	set(handles.listbox, 'string', roi_pairs_files);
 	
-%%======================================================     CLEAR ALL ROI FILES
+%%======================================================     CLEAR ALL ROI PAIRS
 % ------ Function executes when clear_all_button is pressed. ------ %
 
 function clear_all_button_Callback(hObject, eventdata, handles)
 	
 	hMainGui        = getappdata(0, 'hMainGui');
 	roi_pairs_files = getappdata(hMainGui, 'roi_pairs_files');
-	display_list    = getappdata(hMainGui, 'display_list');
-	
+		
 	confirm_clear = questdlg('Are you sure you want to clear all selected ROI file pairs?', 'Confirm Request to Clear ROI Files', 'Yes');
 	
 	if isequal(confirm_clear, 'Yes');
 		roi_pairs_files = {};
-		display_list = {};
 	end
 
 	setappdata(hMainGui, 'roi_pairs_files', roi_pairs_files);
-	setappdata(hMainGui, 'display_list', display_list);
-	set(handles.listbox, 'string', display_list);
+	set(handles.listbox, 'string', roi_pairs_files);
 
 % ===================================================================================== %
 % = 													    TRACKING PARAMETERS								  								=	%

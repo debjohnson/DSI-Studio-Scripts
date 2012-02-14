@@ -38,7 +38,7 @@ function varargout = primary_roi(varargin)
 
 % Edit the above text to modify the response to help primary_roi
 
-% Last Modified by GUIDE v2.5 16-Nov-2011 13:48:11
+% Last Modified by GUIDE v2.5 14-Feb-2012 18:26:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -243,24 +243,6 @@ output_dir = uigetdir('*.*','Select location for output file'); % Specifies loca
 setappdata(hMainGui, 'output_dir', output_dir);
 set(handles.display_outputdir, 'string', output_dir);
 
-% ===================================================================================== %
-% = 											DELETE DELETE DELETE DELETE											            = %
-% ===================================================================================== %	
-% function counter_Callback(hObject, eventdata, handles)
-% % hObject    handle to counter (see GCBO)
-% % eventdata  reserved - to be defined in a future version of MATLAB
-% % handles    structure with handles and user data (see GUIDATA)
-% 
-% % Hints: get(hObject,'String') returns contents of counter as text
-% %        str2double(get(hObject,'String')) returns contents of counter as a
-% %        double
-% 
-% % --- Executes during object creation, after setting all properties.
-% function counter_CreateFcn(hObject, eventdata, handles)
-% % hObject    handle to counter (see GCBO)
-% % eventdata  reserved - to be defined in a future version of MATLAB
-% % handles    empty - handles not created until after all CreateFcns called
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   SPECIFY ROI FILES/PAIRS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%==============================================================     PRIMARY ROI
@@ -286,7 +268,6 @@ function pushbutton_primary_roi_Callback(hObject, eventdata, handles)
 		setappdata(hMainGui, 'roipath', roipath);
 		set(handles.display_primary_roi, 'string', roifile);	
 	end
-	
 
 %%===============================================================     OTHER ROIS
 
@@ -318,13 +299,36 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-% ==========================================================     CLEAR ROI FILES
-% 
-% % --- Executes on button press in pushbutton_clear.
-% function pushbutton_clear_Callback(hObject, eventdata, handles)
-% 
-% set(handles.temp_roi_pairs, 'string', '');
+% ==========================================================     CLEAR ROI FILE
 
+% --- Executes on button press in pushbutton_clear.
+function clear_button_Callback(hObject, eventdata, handles)
+
+	hMainGui     = getappdata(0, 'hMainGui');
+	roi2files    = getappdata(hMainGui, 'roi2files');
+	
+	item_selected = get(handles.listbox, 'Value');
+	roi2files(item_selected, :) = [];
+	
+	setappdata(hMainGui, 'roi2files', roi2files);
+	set(handles.listbox, 'string', roi2files);
+	
+%%======================================================     CLEAR ALL ROI FILES
+
+% --- Executes on button press in clear_all_button.
+function clear_all_button_Callback(hObject, eventdata, handles)	
+	hMainGui  = getappdata(0, 'hMainGui');
+	roi2files = getappdata(hMainGui, 'roi2files');
+
+	confirm_clear = questdlg('Are you sure you want to clear all ROI files?', 'Confirm Request to Clear ROI Files', 'Yes');
+
+	if isequal(confirm_clear, 'Yes');
+		roi2files = {};
+	end
+
+	setappdata(hMainGui, 'roi2files', roi2files);
+	set(handles.listbox, 'string', roi2files);
+		
 % --- Executes on button press in pushbutton_start_tracking.
 function pushbutton_start_tracking_Callback(hObject, eventdata, handles)
 
@@ -494,9 +498,5 @@ set(handles.thread_count_input, 'string', state.thread_count);
 
 % --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
-% hObject    handle to figure1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hint: delete(hObject) closes the figure
 delete(hObject);
