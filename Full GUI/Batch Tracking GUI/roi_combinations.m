@@ -36,7 +36,7 @@ function varargout = roi_combinations(varargin)
 
 % Edit the above text to modify the response to help roi_combinations
 
-% Last Modified by GUIDE v2.5 14-Feb-2012 18:25:29
+% Last Modified by GUIDE v2.5 16-Feb-2012 12:40:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -379,7 +379,7 @@ for i = 1:size(roi_pairs);
 	[pathstr, roi2_outputname, ext] = fileparts(char(roi_pairs(i, 2)));
 	roi_outputnames                 = cat(1, roi_outputnames, {roi_outputname, roi2_outputname});
 	output_filename                 = sprintf('%s_TO_%s%s',roi_outputname,roi2_outputname,output_extension);
-	output                          = sprintf('%s\\%s', output_dir, output_filename);
+	output                          = sprintf('%s\\%s', char(output_dir), char(output_filename));
 	output_list                     = cat(1, output_list, output);
 end
 
@@ -509,3 +509,24 @@ set(handles.thread_count_input, 'string', state.thread_count);
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
 
 delete(hObject);
+
+
+% --- Executes on button press in pushbutton_dsi_studio.
+function pushbutton_dsi_studio_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_dsi_studio (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton_seed_file.
+function pushbutton_seed_file_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_seed_file (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton_fib_file.
+function pushbutton_fib_file_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_fib_file (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

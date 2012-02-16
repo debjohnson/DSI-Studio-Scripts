@@ -350,14 +350,15 @@ function start_tracking_button_Callback(hObject, eventdata, handles)
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   GET ALL DATA FROM GUI   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	hMainGui 					 = getappdata(0, 'hMainGui');
+	hMainGui           = getappdata(0, 'hMainGui');
 	dsi_studio_pointer = getappdata(hMainGui, 'dsi_studio_pointer');
 	seedfile           = getappdata(hMainGui, 'seedfile');
 	fibfile            = getappdata(hMainGui, 'fibfile');
 	roi_pairs_files    = getappdata(hMainGui, 'roi_pairs_files');
 	output_list        = getappdata(hMainGui, 'output_list');
 	output_dir         = getappdata(hMainGui, 'output_dir');
-	roipath            = getappdata(hMainGui, 'roipath')
+	roipath            = getappdata(hMainGui, 'roipath');
+	roi_outputnames    = getappdata(hMainGui, 'roi_outputnames');
 	seed_count         = str2num(strrep(get(handles.seed_count_input, 'string'), ',', ''));
 	fa_threshold       = str2num(get(handles.fa_thresh_input, 'string'));
 	step_size          = str2num(get(handles.step_size_input, 'string'));
@@ -366,6 +367,7 @@ function start_tracking_button_Callback(hObject, eventdata, handles)
 	min_length         = str2num(get(handles.min_input, 'string'));
 	max_length         = str2num(get(handles.max_input, 'string'));
 	thread_count       = str2num(get(handles.thread_count_input, 'string'));
+
 	
 	% Output file extension
 	if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
@@ -378,15 +380,15 @@ function start_tracking_button_Callback(hObject, eventdata, handles)
 
 	roi_pairs = {}
   
-	for i = 1:size(roi_pairs_files);
+	for i = 1:size(roi_pairs_files, 1);
 		roi  = sprintf('%s%s',roipath,char(roi_pairs_files(i)));
 		roi2 = sprintf('%s%s',roipath,char(roi_pairs_files(i, 2)));
 		roi_pairs = cat(1, roi_pairs, {roi, roi2});
-		[pathstr, roi_outputname, ext]  = fileparts(roi);
-		[pathstr, roi2_outputname, ext] = fileparts(roi2);
+		[pathstr, roi_outputname, ext]  = fileparts(char(roi));
+		[pathstr, roi2_outputname, ext] = fileparts(char(roi2));
 		roi_outputnames = cat(1, roi_outputnames, {roi_outputname, roi2_outputname});
 		output_filename = sprintf('%s_TO_%s%s',roi_outputname,roi2_outputname,output_extension);
-		output = sprintf('%s\\%s', output_dir, output_filename);
+		output = sprintf('%s\\%s', char(output_dir), char(output_filename));
 		output_list = cat(1, output_list, output);
 	end
 
