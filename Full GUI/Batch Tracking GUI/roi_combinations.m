@@ -83,7 +83,7 @@ file_list       = {};
 roi_outputnames = {};
 roi_pairs_names = {};
 output_list     = {};
-output_dir      = {};
+output_dir      = [];
 
 setappdata(hMainGui, 'roi_pairs', roi_pairs);
 setappdata(hMainGui, 'file_list', file_list);

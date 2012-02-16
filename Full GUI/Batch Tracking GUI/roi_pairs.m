@@ -100,7 +100,7 @@ function roi_pairs_OpeningFcn(hObject, eventdata, handles, varargin)
 	roi_outputnames = {};
 	display_list    = {};
 	output_list     = {};
-	output_dir      = {};
+	output_dir      = [];
 
 	% Save variables so they can be accessed from other functions
 	setappdata(hMainGui, 'roi_pairs_files', roi_pairs_files);
