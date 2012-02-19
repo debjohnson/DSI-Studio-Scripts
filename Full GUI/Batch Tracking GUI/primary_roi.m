@@ -38,7 +38,7 @@ function varargout = primary_roi(varargin)
 
 % Edit the above text to modify the response to help primary_roi
 
-% Last Modified by GUIDE v2.5 15-Feb-2012 12:51:28
+% Last Modified by GUIDE v2.5 17-Feb-2012 17:51:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -80,16 +80,24 @@ guidata(hObject, handles);
 
 setappdata(0, 'hMainGui', gcf);
 hMainGui = getappdata(0, 'hMainGui');
+
+if exist('./extra_files/dsi_studio_path.mat') == 2;
+	load('./extra_files/dsi_studio_path.mat', 'dsi_studio_pointer');
+end
+
 roi_pairs = {};
 roi2files = {};
 roi_outputnames = {};
 roi_pairs_names = {};
 output_list = {};
+original_path = pwd;
+
 setappdata(hMainGui, 'roi_pairs', roi_pairs);
 setappdata(hMainGui, 'roi2files', roi2files);
 setappdata(hMainGui, 'roi_outputnames', roi_outputnames);
 setappdata(hMainGui, 'roi_pairs_names', roi_pairs_names);
 setappdata(hMainGui, 'output_list', output_list);
+setappdata(hMainGui, 'original_path', original_path);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = primary_roi_OutputFcn(hObject, eventdata, handles) 
@@ -357,6 +365,15 @@ roipath                = getappdata(hMainGui, 'roipath');
 roi_outputnames        = getappdata(hMainGui, 'roi_outputnames');
 roi2files              = getappdata(hMainGui, 'roi2files');
 roi_pairs              = getappdata(hMainGui, 'roi_pairs');
+original_path      = getappdata(hMainGui, 'original_path');
+
+% Check to see if the 'Make Default' checkbox is checked for DSI Studio Path
+if (get(handles.checkbox_default_dsi_studio,'Value') == get(handles.checkbox_default_dsi_studio,'Max'));
+	% The box is checked, so make a file to store the path. This will be loaded automatically the next time the GUI is used
+	filename = 'dsi_studio_path.mat';
+	full_filename = sprintf('%s/extra_files/%s', original_path, filename);
+	save(full_filename, 'dsi_studio_pointer');
+end
 
 % Output file extension
 if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
@@ -454,9 +471,6 @@ fclose(fid);
 
 % --- Executes on button press in save_button.
 function save_button_Callback(hObject, eventdata, handles)
-% hObject    handle to save_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 state.seed_count = str2num(get(handles.seed_count_input, 'string'));
 state.fa_threshold = str2num(get(handles.fa_thresh_input, 'string'));
@@ -478,9 +492,6 @@ save (defaults_filename,'state');
 
 % --- Executes on button press in load_button.
 function load_button_Callback(hObject, eventdata, handles)
-% hObject    handle to load_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 [defaults_file, defaults_filepath] = uigetfile('*.mat','Select file to load saved defaults');
 defaults = sprintf('%s%s',defaults_filepath,defaults_file);
