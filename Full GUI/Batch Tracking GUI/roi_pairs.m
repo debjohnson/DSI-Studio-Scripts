@@ -235,6 +235,10 @@ function add_ROI_button_Callback(hObject, eventdata, handles)
   setappdata(hMainGui, 'roipath', roipath)
   set(handles.listbox, 'string', display_list);
 
+ if length(output_dir) > 1;
+  	cd ../..;
+ end
+
 %%==========================================================     CLEAR ROI PAIR
 % ------ Function executes when clear_button is pressed. ------ %
 
