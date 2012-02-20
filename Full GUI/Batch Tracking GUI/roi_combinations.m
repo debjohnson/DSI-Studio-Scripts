@@ -205,7 +205,7 @@ function add_ROI_button_Callback(hObject, eventdata, handles)
 	[selected_files, roipath] = uigetfile('*.nii','Select ROI files', 'Multiselect', 'on');
 	
 	if iscell(selected_files);
-		flie_list = cat(1, file_list, selected_files(:));
+		file_list = cat(1, file_list, selected_files(:));
 	else
 		file_list = cat(1, file_list, selected_files);
 	end
@@ -386,7 +386,7 @@ function pushbutton_start_tracking_Callback(hObject, eventdata, handles)
 	for i = 1:size(roi_pairs_files);
 		roi                             = sprintf('%s%s',roipath,char(roi_pairs_files(i)));
 		roi2                            = sprintf('%s%s',roipath,char(roi_pairs_files(i, 2)));
-		roi_pairs                       = cat(1, roi_pairs, {primary_roi, roi2});
+		roi_pairs                       = cat(1, roi_pairs, {roi, roi2});
 		[pathstr, roi_outputname, ext]  = fileparts(char(roi_pairs_files(i)));
 		[pathstr, roi2_outputname, ext] = fileparts(char(roi_pairs_files(i, 2)));
 		roi_outputnames                 = cat(1, roi_outputnames, {roi_outputname, roi2_outputname});
