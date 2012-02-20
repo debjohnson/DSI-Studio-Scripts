@@ -236,14 +236,15 @@ function add_ROI_button_Callback(hObject, eventdata, handles)
   display_name = sprintf('%s ; %s',roifile,roi2file);
   display_list = cat(1, display_list, display_name);
   
+ if length(output_dir) > 1;
+  	cd ../..;
+ end
+
   setappdata(hMainGui, 'roi_pairs_files', roi_pairs_files);
   setappdata(hMainGui, 'display_list', display_list);
   setappdata(hMainGui, 'roipath', roipath)
   set(handles.listbox, 'string', display_list);
 
- if length(output_dir) > 1;
-  	cd ../..;
- end
 
 %%==========================================================     CLEAR ROI PAIR
 % ------ Function executes when clear_button is pressed. ------ %

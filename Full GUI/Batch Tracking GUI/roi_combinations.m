@@ -36,7 +36,7 @@ function varargout = roi_combinations(varargin)
 
 % Edit the above text to modify the response to help roi_combinations
 
-% Last Modified by GUIDE v2.5 19-Feb-2012 20:32:57
+% Last Modified by GUIDE v2.5 19-Feb-2012 20:37:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -182,7 +182,6 @@ function outputdirectory_button_Callback(hObject, eventdata, handles)
 
 		prompt     = {'Output Directory:'};
 		directory  = uigetdir('*.*','Select location for output file'); % Specifies location for output file
-		output_dir = cat(1, output_dir, directory);
 		spaces_finder = regexp(directory, '\s');
 		
 		if isequal(length(spaces_finder), 0);
@@ -202,11 +201,6 @@ function add_ROI_button_Callback(hObject, eventdata, handles)
 	hMainGui   = getappdata(0, 'hMainGui');
 	file_list  = getappdata(hMainGui, 'file_list');
 	output_dir = getappdata(hMainGui, 'output_dir');
-	
-	% If user has set an output directory already, cd to output_dir
-	if length(output_dir) > 1;
-		cd(output_dir); % added JP
-	end
 	
 	[selected_files, roipath] = uigetfile('*.nii','Select ROI files', 'Multiselect', 'on');
 	
@@ -373,28 +367,28 @@ function pushbutton_start_tracking_Callback(hObject, eventdata, handles)
 		save(full_filename, 'dsi_studio_pointer');
 	end
 
-	roi_pairs = {}
+	roi_pairs = {};
 	
 	% Create array with all possible combinations of ROI files
-	roi_pairs = nchoosek(file_list, 2);
+	roi_pairs_files = nchoosek(file_list, 2);
 	
 	cd(output_dir);
 	
 	% Output file extension
 	if (get(handles.radiobutton_track,'Value') == get(handles.radiobutton_track,'Max'))
 		% Radio button is selected, take appropriate action
-		output_extension = '.trk'
+		output_extension = '.trk';
 	else
 		% Radio button is not selected, take appropriate action
-		output_extension = '.txt'
+		output_extension = '.txt';
 	end
 	
-	for i = 1:size(roi_pairs);
-		roi                             = sprintf('%s%s',roipath,char(roi_pairs(i)));
-		roi2                            = sprintf('%s%s',roipath,char(roi_pairs(i, 2)));
+	for i = 1:size(roi_pairs_files);
+		roi                             = sprintf('%s%s',roipath,char(roi_pairs_files(i)));
+		roi2                            = sprintf('%s%s',roipath,char(roi_pairs_files(i, 2)));
 		roi_pairs                       = cat(1, roi_pairs, {primary_roi, roi2});
-		[pathstr, roi_outputname, ext]  = fileparts(char(roi_pairs(i)));
-		[pathstr, roi2_outputname, ext] = fileparts(char(roi_pairs(i, 2)));
+		[pathstr, roi_outputname, ext]  = fileparts(char(roi_pairs_files(i)));
+		[pathstr, roi2_outputname, ext] = fileparts(char(roi_pairs_files(i, 2)));
 		roi_outputnames                 = cat(1, roi_outputnames, {roi_outputname, roi2_outputname});
 		output_filename                 = sprintf('%s_TO_%s%s',roi_outputname,roi2_outputname,output_extension);
 		output                          = sprintf('%s\\%s', char(output_dir), char(output_filename));
@@ -522,10 +516,3 @@ function load_button_Callback(hObject, eventdata, handles)
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
 
 	delete(hObject);
-
-
-% --- Executes on button press in outputdirectory_button.
-function outputdirectory_button_Callback(hObject, eventdata, handles)
-% hObject    handle to outputdirectory_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
