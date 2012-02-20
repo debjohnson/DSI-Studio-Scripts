@@ -81,8 +81,10 @@ guidata(hObject, handles);
 setappdata(0, 'hMainGui', gcf);
 hMainGui = getappdata(0, 'hMainGui');
 
-if exist('./extra_files/dsi_studio_path.mat') == 2;
-	load('./extra_files/dsi_studio_path.mat', 'dsi_studio_pointer');
+if exist('extra_files/dsi_studio_path.mat') == 2;
+	load('extra_files/dsi_studio_path.mat', 'dsi_studio_pointer');
+	setappdata(hMainGui, 'dsi_studio_pointer', dsi_studio_pointer);
+	set(handles.display_dsi_studio, 'string', dsi_studio_pointer);
 end
 
 roi_pairs = {};

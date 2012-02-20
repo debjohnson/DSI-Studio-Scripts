@@ -36,7 +36,7 @@ function varargout = roi_combinations(varargin)
 
 % Edit the above text to modify the response to help roi_combinations
 
-% Last Modified by GUIDE v2.5 19-Feb-2012 18:13:13
+% Last Modified by GUIDE v2.5 19-Feb-2012 20:32:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -74,8 +74,10 @@ guidata(hObject, handles);
 setappdata(0, 'hMainGui', gcf);
 hMainGui = getappdata(0, 'hMainGui');
 
-if exist('./extra_files/dsi_studio_path.mat') == 2;
-	load('./extra_files/dsi_studio_path.mat', 'dsi_studio_pointer');
+if exist('extra_files/dsi_studio_path.mat') == 2;
+	load('extra_files/dsi_studio_path.mat', 'dsi_studio_pointer');
+	setappdata(hMainGui, 'dsi_studio_pointer', dsi_studio_pointer);
+	set(handles.display_dsi_studio, 'string', dsi_studio_pointer);
 end
 
 roi_pairs       = {};
@@ -195,7 +197,7 @@ function outputdirectory_button_Callback(hObject, eventdata, handles)
 % ------ Function executes when add_ROI_button is pressed. ------ %
 % ------ Opens file selector window for user to select pairs of ROI files. ------ %
 
-function pushbutton_add_ROI_Callback(hObject, eventdata, handles)
+function add_ROI_button_Callback(hObject, eventdata, handles)
 
 	hMainGui   = getappdata(0, 'hMainGui');
 	file_list  = getappdata(hMainGui, 'file_list');
@@ -206,7 +208,7 @@ function pushbutton_add_ROI_Callback(hObject, eventdata, handles)
 		cd(output_dir); % added JP
 	end
 	
-	[selected_files, roipath] = uigetfile('*.nii','Select second ROI file', default_directory, 'Multiselect', 'on');
+	[selected_files, roipath] = uigetfile('*.nii','Select ROI files', 'Multiselect', 'on');
 	
 	if iscell(selected_files);
 		flie_list = cat(1, file_list, selected_files(:));
@@ -520,3 +522,10 @@ function load_button_Callback(hObject, eventdata, handles)
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
 
 	delete(hObject);
+
+
+% --- Executes on button press in outputdirectory_button.
+function outputdirectory_button_Callback(hObject, eventdata, handles)
+% hObject    handle to outputdirectory_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

@@ -45,7 +45,7 @@ function varargout = roi_pairs(varargin)
 	
 	% Edit the above text to modify the response to help roi_pairs
 	
-	% Last Modified by GUIDE v2.5 19-Feb-2012 18:44:56
+	% Last Modified by GUIDE v2.5 19-Feb-2012 20:13:29
 	
 	%%%  BEGIN INITIALIZATION CODE: DO NOT EDIT   %%%
 	
@@ -94,6 +94,12 @@ function roi_pairs_OpeningFcn(hObject, eventdata, handles, varargin)
 	
 	% Allows storage of variables in GUI for use in other functions
 	hMainGui = getappdata(0, 'hMainGui');
+	
+	if exist('extra_files/dsi_studio_path.mat') == 2;
+		load('extra_files/dsi_studio_path.mat', 'dsi_studio_pointer');
+		setappdata(hMainGui, 'dsi_studio_pointer', dsi_studio_pointer);
+		set(handles.display_dsi_studio, 'string', dsi_studio_pointer);
+	end
 	
 	% Set up variables that will be used to store information later
 	roi_pairs_files = {};
