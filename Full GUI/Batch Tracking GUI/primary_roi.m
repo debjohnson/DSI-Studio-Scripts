@@ -38,7 +38,7 @@ function varargout = primary_roi(varargin)
 
 % Edit the above text to modify the response to help primary_roi
 
-% Last Modified by GUIDE v2.5 17-Feb-2012 17:51:24
+% Last Modified by GUIDE v2.5 19-Feb-2012 18:44:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -132,6 +132,9 @@ dsi_studio_pointer = sprintf('%s%s',dsi_studio_path,dsi_studio);
 setappdata(hMainGui, 'dsi_studio_pointer', dsi_studio_pointer);
 set(handles.display_dsi_studio, 'string', dsi_studio);
 
+% --- Executes on button press in checkbox_default_dsi_studio.
+function checkbox_default_dsi_studio_Callback(hObject, eventdata, handles)
+
 %%===========================================================     SEED FILE
 
 % --- Executes on button press in pushbutton_seed_file.
@@ -168,6 +171,7 @@ set(handles.display_fib_file, 'string', fib);
 
 %%===============================================================     SEED COUNT
 
+function seed_count_input_Callback(hObject, eventdata, handles)	
 % --- Executes during object creation, after setting all properties.
 function seed_count_input_CreateFcn(hObject, eventdata, handles)
 
@@ -176,7 +180,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 %%=============================================================     FA THRESHOLD
-
+function fa_thresh_input_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function fa_thresh_input_CreateFcn(hObject, eventdata, handles)
 
@@ -185,7 +189,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 %%================================================================     STEP SIZE
-
+function step_size_input_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function step_size_input_CreateFcn(hObject, eventdata, handles)
 
@@ -194,7 +198,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 %%============================================================     TURNING ANGLE
-
+function turning_angle_input_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function turning_angle_input_CreateFcn(hObject, eventdata, handles)
 
@@ -203,7 +207,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 %%================================================================     SMOOTHING
-
+function smoothing_input_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function smoothing_input_CreateFcn(hObject, eventdata, handles)
 
@@ -212,7 +216,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 %%===================================================================     MIN
-
+function min_input_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function min_input_CreateFcn(hObject, eventdata, handles)
 
@@ -221,7 +225,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 %%======================================================================     MAX
-
+function max_input_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function max_input_CreateFcn(hObject, eventdata, handles)
 
@@ -230,7 +234,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 %%=============================================================     THREAD COUNT
-
+function thread_count_input_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function thread_count_input_CreateFcn(hObject, eventdata, handles)
 
@@ -243,13 +247,20 @@ end
 % --- Executes on button press in pushbutton_outputfile.
 function pushbutton_outputfile_Callback(hObject, eventdata, handles)
 
-hMainGui = getappdata(0, 'hMainGui');
+	hMainGui   = getappdata(0, 'hMainGui');
+	output_dir = getappdata(hMainGui, 'output_dir');
 
-prompt = {'Output Directory:'};
-output_dir = uigetdir('*.*','Select location for output file'); % Specifies location for output file
-
-setappdata(hMainGui, 'output_dir', output_dir);
-set(handles.display_outputdir, 'string', output_dir);
+	prompt     = {'Output Directory:'};
+	directory  = uigetdir('*.*','Select location for output file'); % Specifies location for output file
+	spaces_finder = regexp(directory, '\s');
+	
+	if isequal(length(spaces_finder), 0);
+		output_dir = cat(1, output_dir, directory);
+		setappdata(hMainGui, 'output_dir', output_dir);
+		set(handles.display_outputdir, 'string', output_dir);
+	else
+		msgbox('The path to the output directory may not contain spaces. Please select a different path, or modify the directory names in the desired path so they do not contain spaces.', 'Directory Path Cannot Contain Spaces', 'warn');
+	end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   SPECIFY ROI FILES/PAIRS   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -365,7 +376,8 @@ roipath                = getappdata(hMainGui, 'roipath');
 roi_outputnames        = getappdata(hMainGui, 'roi_outputnames');
 roi2files              = getappdata(hMainGui, 'roi2files');
 roi_pairs              = getappdata(hMainGui, 'roi_pairs');
-original_path      = getappdata(hMainGui, 'original_path');
+original_path          = getappdata(hMainGui, 'original_path');
+
 
 % Check to see if the 'Make Default' checkbox is checked for DSI Studio Path
 if (get(handles.checkbox_default_dsi_studio,'Value') == get(handles.checkbox_default_dsi_studio,'Max'));
@@ -472,28 +484,30 @@ fclose(fid);
 % --- Executes on button press in save_button.
 function save_button_Callback(hObject, eventdata, handles)
 
-state.seed_count = str2num(get(handles.seed_count_input, 'string'));
-state.fa_threshold = str2num(get(handles.fa_thresh_input, 'string'));
-state.step_size = str2num(get(handles.step_size_input, 'string'));
-state.smoothing = str2num(get(handles.smoothing_input, 'string'));
-state.turning_angle = str2num(get(handles.turning_angle_input, 'string'));
-state.min_length = str2num(get(handles.min_input, 'string'));
-state.max_length = str2num(get(handles.max_input, 'string'));
-state.thread_count = str2num(get(handles.thread_count_input, 'string'));
-
-prompt = {'File name:'};
-dlg_title = 'Enter name for default values set';
-num_lines = 1;
-filename = inputdlg(prompt,dlg_title,num_lines);
-
-defaults_filename = sprintf('%s.mat',char(filename));
-
-save (defaults_filename,'state');
+	original_path = getappdata(hMainGui, 'original_path');
+	
+	state.seed_count    = str2num(get(handles.seed_count_input, 'string'));
+	state.fa_threshold  = str2num(get(handles.fa_thresh_input, 'string'));
+	state.step_size     = str2num(get(handles.step_size_input, 'string'));
+	state.smoothing     = str2num(get(handles.smoothing_input, 'string'));
+	state.turning_angle = str2num(get(handles.turning_angle_input, 'string'));
+	state.min_length    = str2num(get(handles.min_input, 'string'));
+	state.max_length    = str2num(get(handles.max_input, 'string'));
+	state.thread_count  = str2num(get(handles.thread_count_input, 'string'));
+	
+	prompt = {'File name:'};
+	dlg_title = 'Enter name for default values set';
+	num_lines = 1;
+	filename = inputdlg(prompt,dlg_title,num_lines);
+	
+	default_params_filename = sprintf('%s/extra_files/saved_parameters/%s.mat', original_path, char(filename));
+	
+	save (default_params_filename,'state');
 
 % --- Executes on button press in load_button.
 function load_button_Callback(hObject, eventdata, handles)
 
-[defaults_file, defaults_filepath] = uigetfile('*.mat','Select file to load saved defaults');
+[defaults_file, defaults_filepath] = uigetfile('extra_files/saved_parameters','Select file to load saved defaults');
 defaults = sprintf('%s%s',defaults_filepath,defaults_file);
 
 load(defaults);
